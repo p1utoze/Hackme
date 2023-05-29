@@ -9,6 +9,7 @@ import os, typing
 from api_globals import GlobalsMiddleware, g
 import pandas as pd
 from qrcode.image.pil import PilImage
+from json import loads
 
 cred = credentials.Certificate('aventus-website.json')
 firebase_admin.initialize_app(cred)
@@ -68,8 +69,8 @@ async def barcode_reader(request: Request):
 async def add_entry(uid: str):
     s = uid in g.df['UID'].tolist()
     if s:
-        details = g.df.loc[g.df['UID'] == uid].to_dict()
-        print(details)
-        return {'Team Member': 'Found', 'Details': details}
+        details = g.df.loc[g.df['UID'] == uid].to_json(orient='index')
+        # print(details)
+        return {'Team Member': 'Found', 'Details': loads(details)}
     else:
         return {'Team Member': 'NOT Found'}
