@@ -1,0 +1,62 @@
+<!--
+ =========================================================
+ Material Kit PRO - v2.2.0
+ =========================================================
+
+ Product Page: https://www.creative-tim.com/product/material-kit-pro
+ Copyright 2019 Creative Tim (https://www.creative-tim.com)
+
+ Coded by Creative Tim
+
+ =========================================================
+
+ The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+-->
+{% extends 'base.html' %}
+
+{% block head %}
+  <title>Aventus Barcode Scanner</title>
+{% endblock %}
+
+{% block body %}
+<body class="landing-page sidebar-collapse">
+  <div class="page-header header-filter" data-parallax="true" style="background-image: url('../static/img/desk_chair1.jpg')">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6">
+          <h1 class="title">Aventus</h1>
+          <h4>Participant Manager</h4>
+          <br>
+          {% with messages = get_flashed_messages() %}
+            {% if messages: %}
+              {% for message in messages: %}
+                <h4>{{ message }}</h4>
+              {% endfor %}
+            {% endif %}
+          {% endwith %}
+          <form action="/barcode_reader" method="GET">
+            <button type="submit" class="btn btn-danger btn-raised btn-lg">
+              <i class="fa fa-user-circle-o"></i> 
+               Add Entry(CheckIN)
+            </button>
+          </form>
+          <form action="/scan_barcode" method="GET">
+            <button type="submit" class="btn btn-danger btn-raised btn-lg">
+              <i class="fa fa-user-circle-o"></i> 
+               Scan
+            </button>
+          </form>
+          <form action="/status_first" method="GET">
+            <button type="submit" class="btn btn-danger btn-raised btn-lg">
+              <i class="fa fa-user-circle-o"></i> 
+               Current Status
+            </button>
+          </form>
+          <!-- <form action="/teacher_login" method="GET">
+            <button type="submit" class="btn btn-danger btn-raised btn-lg">
+              <i class="fa fa-user-circle-o"></i> 
+               Teacher log in/sign up
+            </button>
+          </form> -->
+          
+{% endblock %}

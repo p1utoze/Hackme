@@ -1,0 +1,145 @@
+Team Code,UID,First Name,Last Name,Gender,College,Ph. No,Email,Team Name,Project Tracks
+WEB01,WEB01-01,Chirag,Manjeshwar,Male,BMS College of Engineering,9741862757,chirag.cs20@bmsce.ac.in,Corded Coders,Web3
+,WEB01-02,Nikhil,Ravi,Male,New Horizon College of Engineering (EANDT),9986700107,nikhilravi56@gmail.com,Corded Coders,Web3
+,WEB01-03,Dharshan,A.N.,Male,New Horizon College of Engineering (EANDT),9483937849,andharshan27an@gmail.com,Corded Coders,Web3
+,WEB01-04,Jayavibhav,N K,Male,New Horizon College of Engineering (EANDT),9916373472,jaya11vibhav@gmail.com,Corded Coders,Web3
+WEB02,WEB02-01,Steeven,Raj,Male,Dayananda Sagar College of Engineering,8618128693,steeven.raj.23@gmail.com,Emergency_code,Web3
+,WEB02-02,Yashas,J,Male,Dayananda Sagar College of Engineering,9353045008,yashas1442@gmail.com,Emergency_code,Web3
+WEB03,WEB03-01,Yogith,G,Male,Dayananda Sagar College of Engineering,8095726210,yogithgkxd@gmail.com,GENESIS,Web3
+,WEB03-02,Punith,Kumar P R,Male,Dayananda Sagar College of Engineering,6363188375,punikumar2002@gmail.com,GENESIS,Web3
+WEB04,WEB04-01,Bhaargav,P N,Male,Sri Sairam College of Engineering,7904423682,krishna.bhaargav@gmail.com,Midas's Touch,Web3
+,WEB04-02,Aruneshwar,U S,Male,Sri Sai Ram Institute of Technology,7200292454,sit21cs037@sairamtap.edu.in,Midas's Touch,Web3
+,WEB04-03,RAJA,DURAI S,Male,Sri Sai Ram Institute of Technology,8825652165,sit21cs040@sairamtap.edu.in,Midas's Touch,Web3
+,WEB04-04,Shiva Prasath,R,Male,Sri Sai Ram Institute of Technology,6381323523,suryashiva396@gmail.com,Midas's Touch,Web3
+WEB05,WEB05-01,Sindhu,D s,Female,Nitte Meenakshi Institute of Technology,9606581764,sindhushirigoudar@gmail.com,TeamInfinity,Web3
+,WEB05-02,Nitish,kumar,Male,Nitte Meenakshi Institute of Technology,9123172795,kumarnitish072001@gmail.com,TeamInfinity,Web3
+WEB06,WEB06-01,Sumeet,Pai,Male,PES University,8380924126,sumeetpai2004@gmail.com,Tech Mavericks,Web3
+,WEB06-02,SAI,NITHIN,Male,PES Institute of Technology Bangalore South Campus,9441734282,nithin6524@gmail.com,Tech Mavericks,Web3
+,WEB06-03,Amith,Sahani,Male,PES University,8217388034,sahaniamith5.as@gmail.com,Tech Mavericks,Web3
+,WEB06-04,Abhijith,M S,Male,PES Institute of Technology Bangalore South Campus,7619405288,abhijithmsaji132@gmail.com,Tech Mavericks,Web3
+WEB07,WEB07-01,Daksh,Kulshrestha,Male,DSCE,9084857736,akshd@outlook.com,CryptoBros,Web3
+,WEB07-02,Yagnadeep,Reddy,Male,DSCE,9390364565,yagnadeep.xo@gmail.com,CryptoBros,Web3
+OPIN01,OPIN01-01,Chandan,B Gowda,Male,Vidyavardhaka College of Engineering,9945543635,chandanbgowda299@gmail.com,Parthenon,Open Innovation
+,OPIN01-02,Sahil,Jain,Male,Vidyavardhaka College of Engineering,9980670768,jainsahil1116@gmail.com,Parthenon,Open Innovation
+,OPIN01-03,Kunal,S,Male,Vidyavardhaka College of Engineering,7349521174,kunalsrinidhi25@gmail.com,Parthenon,Open Innovation
+,OPIN01-04,Rohan,A,Male,Vidyavardhaka College of Engineering,9019210166,rohanaswath@gmail.com,Parthenon,Open Innovation
+OPIN02,OPIN02-01,Raghav,Singh,Male,Jyothy Institute of Technology,8105310326,singhh.raghav17@gmail.com,CodeShinigami,Open Innovation
+,OPIN02-02,Ishana,Mohan Kumar,Female,Jyothy Institute of Technology,8147451434,ishanam23@gmail.com,CodeShinigami,Open Innovation
+,OPIN02-03,yash,yadav,Male,Jyothy Institute of Technology,8310498915,1jt20cs117@jyothyit.ac.in,CodeShinigami,Open Innovation
+,OPIN02-04,Syeda Tahura,Sakhafia,Non Binary,Jyothy Institute of Technology,NA,tahur.sakhafia@gmail.com,CodeShinigami,Open Innovation
+OPIN03,OPIN03-01,RAVIKANT,JHA,Male,Bangalore Institute of Technology,8789427103,ravikant.jha1729@gmail.com,codepirates,Open Innovation
+,OPIN03-02,Sanskar,Sinha,Male,Bangalore Institute of Technology,9546231103,sansinha08@gmail.com,codepirates,Open Innovation
+,OPIN03-03,ASHUTOSH,ANAND,Male,Bangalore Institute of Technology,8102031686,anandashutosh2002@gmail.com,codepirates,Open Innovation
+,OPIN03-04,Harshit,Kumar,Prefer not to say,Bangalore Institute of Technology,7488843417,harshit.k.61120@gmail.com,codepirates,Open Innovation
+OPIN04,OPIN04-01,VIJAY,KUMAR,Male,Bangalore Institute of Technology,9353737083,vijaybgaddi07@gmail.com,Ashram4Hugs,Open Innovation
+,OPIN04-02,Aman,Bibhuti,Male,Bangalore Institute of Technology,8294826677,amanbibhuti12345@gmail.com,Ashram4Hugs,Open Innovation
+OPIN05,OPIN05-01,Ishika,Jain,Female,Dayananda Sagar College of Engineering,8088727214,ishika2413@gmail.com,Ekalavya,Open Innovation
+,OPIN05-02,Dinesh,A,Male,Dayananda Sagar College of Engineering,7337735382,dinesh35382@gmail.com,Ekalavya,Open Innovation
+OPIN06,OPIN06-01,Yash,Karogal,Male,Dr. Ambedkar Institute of Technology,8197516071,yashkarogal@gmail.com,Team Garuda,Open Innovation
+,OPIN06-02,Manoj,Gowda,Male,Dr. Ambedkar Institute of Technology,8660614164,manojr5102@gmail.com,Team Garuda,Open Innovation
+OPIN07,OPIN07-01,MALLESH,C N,Male,Presidency University Bangalore,8147774743,cnmallesh500@gmail.com,ONYX-Vikasana,Open Innovation
+,OPIN07-02,Harsha,Gowda R,Male,Presidency University Bangalore,9513005221,harshagowda1317@gmail.com,ONYX-Vikasana,Open Innovation
+,OPIN07-03,Thushar,R,Male,Presidency University Bangalore,7022486221,thushar.r02@gmail.com,ONYX-Vikasana,Open Innovation
+,OPIN07-04,Mohammad,Aman,Male,Presidency University Bangalore,9663798874,mohammadaman055@gmail.com,ONYX-Vikasana,Open Innovation
+OPIN08,OPIN08-01,Abhishek,Kumar,Male,Rungta College of Engineering and Technology,9119206459,jhaabhishekkumar49@gmail.com,The Reactors,Open Innovation
+,OPIN08-02,Amanjeet,Kumar pal,Male,Rungta College of Engineering and Technology,6203736744,amanjeetkumarpal0432@gmail.com,The Reactors,Open Innovation
+,OPIN08-03,P,VAIBHAV,Male,Rungta College of Engineering and Technology,7000984388,pvaibhavofficial@gmail.com,The Reactors,Open Innovation
+,OPIN08-04,Alok,Kumar,Male,Rungta College of Engineering and Technology,8340175751,alokkumar11746@gmail.com,The Reactors,Open Innovation
+OPIN09,OPIN09-01,Manisha,Kumari,Female,Cmr Institute of Technology,9606746147,2021maku243@gmail.com,Kinetic Knights,Open Innovation
+,OPIN09-02,Kamaljeeth,Anand,Male,Cmr Institute of Technology,7676005386,anand.kamaljeeth@gmail.com,Kinetic Knights,Open Innovation
+,OPIN09-03,Sunil,Kumar P,Male,Cmr Institute of Technology,9964297599,sunilkpg23@gmail.com,Kinetic Knights,Open Innovation
+,OPIN09-04,Louise,Patra,Male,Cmr Institute of Technology,9664361362,rocklouis055@gmail.com,Kinetic Knights,Open Innovation
+OPIN10,OPIN10-01,Vighnesh,Mestry,Male,St. Francis Institute of Technology (engg. College),7045266885,mestryvighnesh27@gmail.com,Encryptors,Open Innovation
+,OPIN10-02,Joel,Devasia,Male,St. Francis Institute of Technology (engg. College),9137783394,joeldevasia1962002@gmail.com,Encryptors,Open Innovation
+,OPIN10-03,Parbat,Rajpurohit,Male,St. Francis Institute of Technology (engg. College),9372397615,prajpurohit680@gmail.com,Encryptors,Open Innovation
+,OPIN10-04,Parth,Barai,Male,St. Francis Institute of Technology (engg. College),9372269353,parthnbarai1234@gmail.com,Encryptors,Open Innovation
+OPIN11,OPIN11-01,Birat,Datta,Male,Jain University,6009344713,birat.datta26@gmail.com,Team404,Open Innovation
+,OPIN11-02,Anish,Kumar,Male,Jain University,8709857096,anishthegreat91221@gmail.com,Team404,Open Innovation
+OPIN12,OPIN12-01,Hussain,Afroz,Male,Bangalore Institute of Technology,9569849117,hussainafroz903@gmail.com,Bitwiz,Open Innovation
+,OPIN12-02,Manish,Gond,Male,Bangalore Institute of Technology,7619352224,manish.n.gond@gmail.com,Bitwiz,Open Innovation
+,OPIN12-03,SAI SANDEEP,KOLLIPARA,Male,Bangalore Institute of Technology,9059446766,ksai11122002@gmail.com,Bitwiz,Open Innovation
+,OPIN12-04,Vikhyath,K,Male,Bangalore Institute of Technology,7338054872,vikhyathkulal@gmail.com,Bitwiz,Open Innovation
+OPIN13,OPIN13-01,Bhavika,Paladugu,Female,Bangalore Institute of Technology,9449893690,paladugubhavika@gmail.com,Fytosentry,Open Innovation
+,OPIN13-02,Gagana,Umesh,Female,Bangalore Institute of Technology,6360052179,gaganaumesh18@gmail.com,Fytosentry,Open Innovation
+,OPIN13-03,Lahari,G,Female,N/A,8951658540,lahari.raj.2003@gmail.com,Fytosentry,Open Innovation
+,OPIN13-04,Dhanyashree,P N,Female,Bangalore Institute of Technology,8951876922,dhanyashreepn301@gmail.com,Fytosentry,Open Innovation
+OPIN14,OPIN14-01,Ashutosh,Chaudhary,Male,Rungta College of Engineering and Technology,7903138523,ashutosh.chaudhary790@gmail.com,Amaterasu,Open Innovation
+,OPIN14-02,Aman,Kumar,Male,Rungta College of Engineering and Technology,6261118964,amanmak000@gmail.com,Amaterasu,Open Innovation
+,OPIN14-03,Astha,Dewangan,Female,Rungta College of Engineering and Technology,8889206425,dewanganastha82@gmail.com,Amaterasu,Open Innovation
+,OPIN14-04,Harshit,Mishra,Male,Rungta College of Engineering and Technology,9399219408,miananya2@gmail.com,Amaterasu,Open Innovation
+OPIN15,OPIN15-01,MANOJ,JB,Male,Sri Sai Ram Institute of Technology,9345809942,sit21cs076@sairamtap.edu.in,Sparkle Minds,Open Innovation
+,OPIN15-02,SHRIKANTH,K S,Male,Sri Sai Ram Institute of Technology,8754119781,sit21cs151@sairamtap.edu.in,Sparkle Minds,Open Innovation
+,OPIN15-03,YUVARAJ,B,Male,Sri Sai Ram Institute of Technology,7708855392,sit21cs104@sairamtap.edu.in,Sparkle Minds,Open Innovation
+,OPIN15-04,ABILASH,MOSURU,Male,Sri Sai Ram Institute of Technology,9392126036,sit21cs087@sairamtap.edu.in,Sparkle Minds,Open Innovation
+OPIN16,OPIN16-01,Manvitha,Shivalingappa MP,Female,Global Academy of Technology,9986127104,manvithamp@gmail.com,Samvit,AI&ML
+,OPIN16-02,MANOJ,HEGDE,Male,Global Academy of Technology,9482495013,manojihegde3@gmail.com,Samvit,AI&ML
+,OPIN16-03,N.Dharshan,.,Male,Global Academy of Technology,7338286904,ndharshanraju@gmail.com,Samvit,AI&ML
+,OPIN16-04,Vaishnavi,MN,Female,Global Academy of Technology,9845528522,vaishnavimn178@gmail.com,Samvit,AI&ML
+IOT01,IOT01-01,Abhineeth,Thaire,Prefer not to say,Dayananda Sagar College of Engineering,7483083273,abhineetthaire@gmail.com,AutoFlora,IoT
+,IOT01-02,Mohamed Faizan,Tabassum,Male,Dayananda Sagar College of Engineering,NA,faizantabassum2003@gmail.com,AutoFlora,IoT
+IOT02,IOT02-01,Kavita Shankar,Gouda,Female,University Visvesvaraya College of Engineering,9019061737,kavitagouda0601@gmail.com,Circuitsavvy,IoT
+,IOT02-02,Pramod,M,Male,M. S. Ramaiah University of Applied Sciences,6361442431,pramodnaidu6224@gmail.com,Circuitsavvy,IoT
+,IOT02-03,Muralikrishna,Y K,Male,University Visvesvaraya College of Engineering,8050538012,murali2001kichcha@gmail.com,Circuitsavvy,IoT
+,IOT02-04,Manoj,V S,Male,University Visvesvaraya College of Engineering,9731524549,manojshetty0506@gmail.com,Circuitsavvy,IoT
+IOT03,IOT03-01,Vinit,Singroha,Male,Netaji Subhas Institute of Technology,9355566074,vinit.ug20@nsut.ac.in,Kaivalya,IoT
+,IOT03-02,Rithik,Kumar,Male,"Netaji Subhas University Of Technology, Delhi",8528878498,rithik.ug20@nsut.ac.in,Kaivalya,IoT
+IOT04,IOT04-01,Akshay,Prasad,Male,Bnm Institute of Technology,7204021634,w4rl0ckm0nk3y@protonmail.com,Lucifer,IoT
+,IOT04-02,Adithya,Manjunath,Male,Bnm Institute of Technology,8147190095,adithyam211@gmail.com,Lucifer,IoT
+IOT05,IOT05-01,ABHAY,SIRISH B.R,Male,Dayananda Sagar College of Engineering,8277271627,abhaysirish1@gmail.com,One and Zero,IoT
+,IOT05-02,Ananya,Yakkundi,Male,Dayananda Sagar College of Engineering,9611655482,ananyahero4@gmail.com,One and Zero,IoT
+,IOT05-03,Ajeet,Yankanchi,Male,Dayananda Sagar College of Engineering,8431858788,ajeetmy502@gmail.com,One and Zero,IoT
+IOT06,IOT06-01,Shreyas,Kashyap,Male,Jyothy Institute of Technology,7899819776,shreyaskashyap2002@gmail.com,W-SQUAD,IoT
+,IOT06-02,Tejas,R,Male,Jyothy Institute of Technology,8971460880,1jt20is045@jyothyit.ac.in,W-SQUAD,IoT
+AIML01,AIML01-01,Prateek,Bhat,Male,Jyothy Institute of Technology,9019532230,prateekbhat07@gmail.com,MedInterp,AI&ML
+,AIML01-02,Sharaj,Kornaya,Male,Jyothy Institute of Technology,9481128759,sharajkornaya2359@gmail.com,MedInterp,AI&ML
+,AIML01-03,Sahana,Somani,Female,Jyothy Institute of Technology,9731809270,sahanavsomani@gmail.com,MedInterp,AI&ML
+,AIML01-04,Vishnu Prasad,Pai,Male,Jyothy Institute of Technology,9916257177,vishnuprasad24km17@gmail.com,MedInterp,AI&ML
+AIML02,AIML02-01,Chirag,Aswal,Male,Dayananda Sagar University,8618479274,chiragaswal2@gmail.com,TrojanZ,AI&ML
+,AIML02-02,Bhagyalakshmi,R A,Female,Dayananda Sagar University,6364073036,rajkumarbhagya9108@gmail.com,TrojanZ,AI&ML
+,AIML02-03,Aditya,Pandey,Male,Dayananda Sagar University,6360469908,adityapandey4464@gmail.com,TrojanZ,AI&ML
+AIML03,AIML03-01,Vignesh,R S,Male,Bangalore Institute of Technology,9008748799,vigneshrs163@gmail.com,ML Avengers,AI&ML
+,AIML03-02,Sanjana,S,Female,Bangalore Institute of Technology,8088998123,sanjanachitragar04@gmail.com,ML Avengers,AI&ML
+,AIML03-03,Shreyas,R S,Male,Bangalore Institute of Technology,8123516590,iamshrey26@gmail.com,ML Avengers,AI&ML
+,AIML03-04,Shivam,Yadav,Male,Bangalore Institute of Technology,9080467733,shivamyadav22aug@gmail.com,ML Avengers,AI&ML
+AIML04,AIML04-01,Ishan,Gupta,Male,MSRIT,8287765082,guptaishan114@gmail.com,The TechTitans,AI&ML
+,AIML04-02,Vishal,Chaurasia,Male,MSRIT,9115056641,itsvishal1035@gmail.com,The TechTitans,AI&ML
+,AIML04-03,Nitin,Goel,Male,MSRIT,9821647448,guptanitin3333@gmail.com,The TechTitans,AI&ML
+,AIML04-04,Anurag,Bhardwaj,Male,MSRIT,9508700785,banurag985@gmail.com,The TechTitans,AI&ML
+AIML05,AIML05-01,Cia,Shetty,Female,Dayananda Sagar College of Engineering,9611852628,shettycia22@gmail.com,ByteMonger,AI&ML
+,AIML05-02,Joseph,Vishal,Male,Dayananda Sagar College of Engineering,7619114657,josephrvishal@gmail.com,ByteMonger,AI&ML
+,AIML05-03,Riya,Subash,Female,Dayananda Sagar College of Engineering,8088617074,riyasubash23@gmail.com,ByteMonger,AI&ML
+AIML06,AIML06-01,Harisharajan,RR,Male,Sri Sai Ram Institute of Technology,9791340230,sit21cs123@sairamtap.edu.in,TEAM VOID,AI&ML
+,AIML06-02,Sakthi Arunachalam,S,Male,Sri Sai Ram Institute of Technology,9786243189,sakthiarun65@gmail.com,TEAM VOID,AI&ML
+,AIML06-03,Bharathraj,N,Male,Sri Sai Ram Institute of Technology,7604837001,sit21cs096@sairamtap.edu.in,TEAM VOID,AI&ML
+,AIML06-04,EBISHDON,G V,Male,Sri Sai Ram Institute of Technology,7395902949,sit21cs003@sairamtap.edu.in,TEAM VOID,AI&ML
+AIML07,AIML07-01,Akkidasari,Varshitha,Female,Dayananda Sagar College of Engineering,8951430028,varshithaa17@gmail.com,A_Mentos,AI&ML
+,AIML07-02,Spandana,R S,Female,Dayananda Sagar College of Engineering,8088050259,spandanars528@gmail.com,A_Mentos,AI&ML
+,AIML07-03,Harsh,Gupta,Male,Dayananda Sagar College of Engineering,7254893116,harsh3101gupta@gmail.com,A_Mentos,AI&ML
+,AIML07-04,Dheeraj,gajula,Male,Dayananda Sagar College of Engineering,6281405953,dheerajgajula2202@gmail.com,A_Mentos,AI&ML
+AIML08,AIML08-01,Dhanush,S,Male,BMS College of Engineering,9900206879,dhanush.s1594@gmail.com,SomethingAI,AI&ML
+,AIML08-02,Deeksha,B,Female,BMS College of Engineering,8657694365,deekshamb.ai21@bmsce.ac.in,SomethingAI,AI&ML
+,AIML08-03,Ankith,L,Male,BMS College of Engineering,8618402814,ankithl135@gmail.com,SomethingAI,AI&ML
+,AIML08-04,Ananya,Sharma,Female,BMS College of Engineering,9607383430,ananyas0304@gmail.com,SomethingAI,AI&ML
+AIML09,AIML09-01,Tarun,C Reddy,Male,Presidency University Bangalore,8310726949,tarunreddy15112001@gmail.com,Hexa,AI&ML
+,AIML09-02,Noaman,Ahmed,Male,Presidency University,7259530258,noamanahmedai@gmail.com,Hexa,AI&ML
+,AIML09-03,Umraz,Khan,Male,Presidency University Bangalore,8660536753,kumraz858@gmail.com,Hexa,AI&ML
+AIML10,AIML10-01,KRUTHIKA,K BHAT,Female,Bangalore Institute of Technology,9945311133,kruthikakbhat.aiml.24@gmail.com,KindVillians,AI&ML
+,AIML10-02,Vibha,MC,Female,Bangalore Institute of Technology,9606034375,vibhamc7@gmail.com,KindVillians,AI&ML
+AIML11,AIML11-01,Yashwanth,Reddy,Male,PES University,7624885411,bsyreddy@gmail.com,Qubit,AI&ML
+,AIML11-02,Pratham,R Shetty,Male,PES University,7022369825,prathamshetty0826@gmail.com,Qubit,AI&ML
+,AIML11-03,Jitesh,Nayak,Male,PES University,6361270426,jiteshnayak2004@gmail.com,Qubit,AI&ML
+AIML12,AIML12-01,Dellwyn,Tennison,Male,MS Ramaiah Institute of Technology,9108864712,dellwyntennison@gmail.com,Agasthya,AI&ML
+,AIML12-02,Bharath,M B,Male,MS Ramaiah Institute of Technology,7349007419,bmb583219@gmail.com,Agasthya,AI&ML
+,AIML12-03,Cheithanya,PR,Male,MS Ramaiah Institute of Technology,9620402645,cheithanya2002@gmail.com,Agasthya,AI&ML
+,AIML12-04,Ankita,Patil,Female,MS Ramaiah Institute of Technology,6362182226,ankitapatilcse@gmail.com,Agasthya,AI&ML
+AIML13,AIML13-01,Prashanth Chowdary,Upputuri,Male,Chaitanya Bharathi Inst. of Technology (MBA),9502140708,prashanth.162003@gmail.com,Team Eagle,AI&ML
+,AIML13-02,Medhansh,Tanam,Male,Chaitanya Bharathi Inst. of Technology (MBA),9809998499,medhansh.t@gmail.com,Team Eagle,AI&ML
+,AIML13-03,Sai,Jayanth Patel,Male,Chaitanya Bharathi Inst. of Technology (MBA),9652765205,patelsaijayanth123@gmail.com,Team Eagle,AI&ML
+,AIML13-04,Bhanu Prasad,Paitar,Male,Chaitanya Bharathi Inst. of Technology (MBA),9515831037,prasadbhanu894@gmail.com,Team Eagle,AI&ML
+AIML14,AIML14-01,LOKESH,PRASAD,Male,New Horizon College of Engineering (EANDT),9113597514,lokeshprasad125@gmail.com,KARL,AI&ML
+,AIML14-02,Kamboji,Akhilesh,Male,New Horizon College of Engineering,6361647498,kambojiakhilesh12@gmail.com,KARL,AI&ML
+,AIML14-03,Rohan,Nagarkatte,Male,New Horizon College of Engineering,8197808139,rohannagarkatte@gmail.com,KARL,AI&ML
+AIML15,AIML15-01,Harsha,S,Male,Dayananda Sagar College of Artsscience and Commerce,8861238713,sharsha307@gmail.com,Code Crusaders,AI&ML
+,AIML15-02,Sidhanti,Patil,Female,Dayananda Sagar College of Engineering,9663675074,sidpatil2209@gmail.com,Code Crusaders,AI&ML
+,AIML15-03,Harsha,Tejaswi,Male,Dayananda Sagar College of Engineering,9513005221,harshatejaswi4@gmail.com,Code Crusaders,AI&ML
+,AIML15-04,Namrata,Hakari,Female,Dayananda Sagar College of Engineering,7022749528,namratahakari@gmail.com,Code Crusaders,AI&ML
