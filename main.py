@@ -68,7 +68,8 @@ async def barcode_reader(request: Request):
 async def add_entry(uid: str):
     s = uid in g.df['UID'].tolist()
     if s:
-        print(g.df.loc[g.df['UID'] == uid].values)
-        return {'Team Member': 'Found'}
+        details = g.df.loc[g.df['UID'] == uid].values
+        print(details[0].tolist())
+        return {'Team Member': 'Found', 'Details': details[0].tolist()}
     else:
         return {'Team Member': 'NOT Found'}
