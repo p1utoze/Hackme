@@ -5,7 +5,7 @@ from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 import firebase_admin
 from firebase_admin import credentials, firestore
-import os
+import os, typing
 from api_globals import GlobalsMiddleware, g
 import pandas as pd
 from qrcode.image.pil import PilImage
@@ -28,14 +28,29 @@ firebaseConfig = {
 
 app = FastAPI()
 router = APIRouter()
+
 app.add_middleware(GlobalsMiddleware)
 app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory="templates")
+
+
+
+def flash(request: Request, message: typing.Any, category: str = "primary") -> None:
+   if "_messages" not in request.session:
+       request.session["_messages"] = []
+       request.session["_messages"].append({"message": message, "category": category})
+
+def get_flashed_messages(request: Request):
+   print(request.session)
+   return request.session.pop("_messages") if "_messages" in request.session else []
+
+templates.env.globals['get_flashed_messages'] = get_flashed_messages
+
 @app.on_event("startup")
 async def load_data():
     g.df = pd.read_csv('teams.csv')
 
-# @app.get("/", dependencies=[Depends(load_data)], response_class=HTMLResponse,)
+# @app.get("/", dependencies=[Depends(load_data)], response_class=HTMLResponse)
 # async def home(request: Request):
 #     return templates.TemplateResponse("home_page.html", {"request": request})
 
@@ -45,6 +60,15 @@ async def say_hello(name: str):
     return {"message": f"Hello {name}"}
 
 
-@app.get("/barcode_reader")
-async def barcode_reader():
-    pass
+@app.get("/barcode_reader", response_class=HTMLResponse)
+async def barcode_reader(request: Request):
+    return templates.TemplateResponse('barcode_reader_page.html', {"request": request})
+
+@app.get("/scan_qr/", dependencies=[Depends(load_data)])
+async def add_entry(uid: str):
+    s = uid in g.df['UID'].tolist()
+    if s:
+        print(g.df.loc[g.df['UID'] == uid].values)
+        return {'Team Member': 'Found'}
+    else:
+        return {'Team Member': 'NOT Found'}
