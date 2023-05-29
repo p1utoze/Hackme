@@ -50,9 +50,9 @@ templates.env.globals['get_flashed_messages'] = get_flashed_messages
 async def load_data():
     g.df = pd.read_csv('teams.csv')
 
-# @app.get("/", dependencies=[Depends(load_data)], response_class=HTMLResponse)
-# async def home(request: Request):
-#     return templates.TemplateResponse("home_page.html", {"request": request})
+@app.get("/", dependencies=[Depends(load_data)], response_class=HTMLResponse)
+async def home(request: Request):
+    return templates.TemplateResponse("home.html", {"request": request})
 
 
 @app.get("/hello/{name}")
