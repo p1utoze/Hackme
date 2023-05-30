@@ -5,14 +5,15 @@
 </head>
 <body>
     <h1>Passkey Form</h1>
-    <h2>Welcome {{ UID }}
-    <form method="post" action="/checkin_out" >
-        <input type="radio" id="checkin" name="action" value="checkin" required>
-        <label for="checkin">Check-in</label>
-        <br>
-        <input type="radio" id="checkout" name="action" value="checkout" required>
-        <label for="checkout">Check-out</label>
-        <br><br>
+    <h2>Welcome {{ UID }} </h2>
+    <form method="post" action="/checkin_out/{{ UID }}" >
+<!--        <input type="hidden" name="uid" value="{{ UID }}" />-->
+<!--        <input type="radio" id="checkin" name="action" value="checkin" required>-->
+<!--        <label for="checkin">Check-in</label>-->
+<!--        <br>-->
+<!--        <input type="radio" id="checkout" name="action" value="checkout" required>-->
+<!--        <label for="checkout">Check-out</label>-->
+<!--        <br><br>-->
         <label for="passkey">Passkey:</label>
         <input type="password" id="passkey" name="passkey" required>
         <br><br>
@@ -37,5 +38,4 @@
         }
     </script>
 </body>
-
 </html>

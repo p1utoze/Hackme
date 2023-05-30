@@ -77,13 +77,13 @@ async def add_entry(request: Request, uid: str):
         doc = loads(details[1:-1])
         doc['status'] = 0
         member_status = "UNREGISTERED"
-
         participants = "participants"
         cursor = db.collection(participants)
         # print(cursor.get()[1].to_dict())
         query = cursor.where(filter=FieldFilter("UID", "==", uid)).stream()
+
         # query_len = list(query).__len__()
-        # print(query)
+        print(query)
         data = {}
         for doc in query:
             data = doc.to_dict()
@@ -103,7 +103,7 @@ async def add_entry(request: Request, uid: str):
             return templates.TemplateResponse('checkin_out.html', {'request': request, 'UID': uid, 'password': "aventus@6969"})
 
         payload = {'request': request, 'Team Member': member_status, 'Details': doc}
-        db.collection(participants).document(uid).set(doc)
+        # db.collection(participants).document(uid).set(doc)
         return templates.TemplateResponse('master_checkin.html', payload)
         # cursor = db.collection(participants)
         # # query = cursor.where("UID", "in", ["jflksdjflk"]).stream()
@@ -115,10 +115,15 @@ async def add_entry(request: Request, uid: str):
         return {'Error': 'INVALID UID FOUND'}
 
 
-@app.post("/checkin_out")
-async def checkin_out(request: Request):
+@app.post("/checkin_out/{uid}")
+async def checkin_out(request: Request, uid: str):
+    print(uid)
+    return {"UID": uid}
     try:
-        print("SUCCESS")
+        participants = "participants"
+        cursor = db.collection(participants)
+        # print(cursor.get()[1].to_dict())
+        query = cursor.where(filter=FieldFilter("UID", "==", uid)).stream()
         return {"API": "called successfully"}
     except:
         print("ERROR")
