@@ -1,0 +1,186 @@
+<!--
+ =========================================================
+ Material Kit PRO - v2.2.0
+ =========================================================
+
+ Product Page: https://www.creative-tim.com/product/material-kit-pro
+ Copyright 2019 Creative Tim (https://www.creative-tim.com)
+
+ Coded by Creative Tim
+
+ =========================================================
+
+ The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+-->
+{% extends 'base.html' %}
+
+{% block head %}
+  <title>AM Student Log In</title>
+{% endblock %}
+
+{% block body %}
+<body class="login-page sidebar-collapse">
+  <nav class="navbar navbar-color-on-scroll navbar-transparent    fixed-top  navbar-expand-lg " color-on-scroll="100" id="sectionsNav">
+    <div class="container">
+      <div class="navbar-translate">
+        <div class="navbar-brand">
+          Participant Manager
+        </div>
+      </div>
+    </div>
+  </nav>
+  <div class="page-header header-filter" style="background-image: url('../static/img/desk_chair1.jpg'); background-size: cover; background-position: top center;">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-4 col-md-6 col-sm-8 ml-auto mr-auto">
+        </div>
+        <form class="form" method="POST", action="/barcode_reader">
+          <button type="submit" class="btn btn-danger btn-raised btn-lg">Scan</button>
+          <script>
+            function callFlaskFunction() {
+                var xhr = new XMLHttpRequest();
+                xhr.open('POST', '/barcode_reader', true);
+                xhr.onload = function() {
+                    if (xhr.status === 200) {
+                        console.log(xhr.responseText);
+                    }
+                };
+                xhr.send();
+            }
+        </script>
+      </div>
+    </form>
+
+          <form class="form" method="POST" action="/add_entry">
+            <div class="card card-login">
+              <h2 class="card-title text-center">Master Check IN</h2>
+              <!-- <div class="social-line">
+                <a href="#pablo" class="btn btn-just-icon btn-link btn-white">
+                  <i class="fa fa-google-plus"></i>
+                </a>
+              </div> -->
+              <div class="card-body ">
+                {% with messages = get_flashed_messages() %}
+                  {% if messages: %}
+                    {% for message in messages: %}
+                      <h4>{{ message }}</h4>
+                    {% endfor %}
+                  {% endif %}
+                {% endwith %}
+
+                <span class="bmd-form-group">
+                  <div class="input-group" style="display: flex; flex-direction: column;">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">
+                        Team-ID
+                      </span>
+                    </div>
+                    <div>
+                      <input style="width: 90%; margin-left: 15px;" name="team_id" value="{{ text[0] }}" type="text" class="form-control" placeholder="TeamID" required>
+                    </div>
+                  </div>
+                </span>
+
+                <span class="bmd-form-group">
+                  <div class="input-group" style="display: flex; flex-direction: column;">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">
+                        Track
+                      </span>
+                    </div>
+                    <div>
+                      <input style="width: 90%; margin-left: 15px;" name="track" value="{{ text[1] }}" type="text" class="form-control" placeholder="Track" required>
+                    </div>
+                  </div>
+                </span>
+
+                <span class="bmd-form-group">
+                  <div class="input-group" style="display: flex; flex-direction: column;">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">
+                        Team Name
+                      </span>
+                    </div>
+                    <div>
+                      <input style="width: 90%; margin-left: 15px;" name="team_name" value="{{ text[2] }}" type="text" class="form-control" placeholder="Team Name" required>
+                    </div>
+                  </div>
+                </span>
+
+                <span class="bmd-form-group">
+                  <div class="input-group" style="display: flex; flex-direction: column;">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">
+                        Participant Name
+                      </span>
+                    </div>
+                    <div>
+                      <input style="width: 90%; margin-left: 15px;" name="team_member" value="{{ text[3] }}" type="text" class="form-control" placeholder="Member Name" required>
+                    </div>
+                  </div>
+                </span>
+
+                <span class="bmd-form-group">
+                  <div class="input-group" style="display: flex; flex-direction: column;">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">
+                       Gender
+                      </span>
+                    </div>
+                    <div>
+                      <input style="width: 90%; margin-left: 15px;" name="gender" value="{{ text[4] }}" type="text" class="form-control" placeholder="gender" required>
+                    </div>
+                  </div>
+                </span>
+
+                <span class="bmd-form-group">
+                  <div class="input-group" style="display: flex; flex-direction: column;">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">
+                       Collge ID Card Verification  
+                       <input style="width: 40px; height: 25px;" type="checkbox" id="college_id" name="college_id" value="college_id">
+                      </span>
+                    </div>
+                    <div>
+                      <!-- <input style="width: 90%; margin-left: 15px;" name="gender" value="{{ text[4] }}" type="text" class="form-control" placeholder="gender" required> -->
+                    </div>
+                  </div>
+                </span>
+
+                <span class="bmd-form-group">
+                  <div class="input-group" style="display: flex; flex-direction: column;">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">
+                       Consent Form Verification
+                      </span>
+                      <input style="width: 25px; height: 25px;" type="checkbox" id="consent_form" name="consent_form" value="consnet_form">
+                    </div>
+                    <div>
+
+                      <!-- <input style="width: 90%; margin-left: 15px;" name="gender" value="{{ text[4] }}" type="text" class="form-control" placeholder="gender" required> -->
+                    </div>
+                  </div>
+                </span>
+
+              <div class="card-footer justify-content-center">
+                <button type="submit" class="btn btn-danger btn-raised btn-lg">Submit</button>
+              </div>
+            </div>
+          </form>
+          <div class="card card-login card-hidden text-center">
+            <!-- <div style="padding-top: 7px;">
+              <label>Not registered?</label>
+              <a href="/student_signup" style="color: #f44336; ">Sign Up</a>
+              <br/>
+              <label>Forgot password?</label>
+              <a href="/forgot_password" style="color: #f44336;">Click here</a>
+            </div> -->
+            <form action="/barcode_reader" method="GET">
+              <button type="submit" class="btn btn-danger btn-raised btn-lg">Back</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

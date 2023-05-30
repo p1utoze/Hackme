@@ -1,0 +1,124 @@
+<!--
+ =========================================================
+ Material Kit PRO - v2.2.0
+ =========================================================
+
+ Product Page: https://www.creative-tim.com/product/material-kit-pro
+ Copyright 2019 Creative Tim (https://www.creative-tim.com)
+
+ Coded by Creative Tim
+
+ =========================================================
+
+ The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+-->
+{% extends 'base.html' %}
+
+{% block head %}
+  <title>AM Student Log In</title>
+{% endblock %}
+
+{% block body %}
+<body class="login-page sidebar-collapse">
+  <nav class="navbar navbar-color-on-scroll navbar-transparent    fixed-top  navbar-expand-lg " color-on-scroll="100" id="sectionsNav">
+    <div class="container">
+      <div class="navbar-translate">
+        <div class="navbar-brand">
+          <H2>CHECK IN/ CHECK OUT</H2>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+
+
+  <div class="page-header header-filter" style="background-image: url('../static/img/desk_chair1.jpg'); background-size: cover; background-position: top center;">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-4 col-md-6 col-sm-8 ml-auto mr-auto">
+        </div>
+        <form class="form" method="POST", action="/scan_barcode">
+          <button type="submit" class="btn btn-danger btn-raised btn-lg">Scan</button>
+          <script>
+            function callFlaskFunction() {
+                var xhr = new XMLHttpRequest();
+                xhr.open('POST', '/scan_barcode', true);
+                xhr.onload = function() {
+                    if (xhr.status === 200) {
+                        console.log(xhr.responseText);
+                    }
+                };
+                xhr.send();
+            }
+        </script>
+      </div>
+    </form>
+
+          <form class="form" method="POST" action="/scan_update">
+              <h2 class="card-title text-center text-info">Participant:- {{ student_name }}</h2>
+              <!-- <div class="social-line">
+                <a href="#pablo" class="btn btn-just-icon btn-link btn-white">
+                  <i class="fa fa-google-plus"></i>
+                </a>
+              </div> -->
+                {% with messages = get_flashed_messages() %}
+                  {% if messages: %}
+                    {% for message in messages: %}
+                      <h4>{{ message }}</h4>
+                    {% endfor %}
+                  {% endif %}
+                {% endwith %}
+              
+                
+
+                      <div class="justify-content-center">
+                      <select class="form-select form-select-lg border-0 mb-1 px-4 py-4 " aria-label="form-select-lg example" name="status">
+                        <option selected>Select the Status of the Participant</option>
+                        <option class="dropdown-item" value="IN">IN</option>
+                        <option class="dropdown-item" value="OUT">OUT</option>
+                      </select>
+                    </div>
+
+                
+
+
+                <!-- <span class="bmd-form-group">
+                  <div class="input-group" style="display: flex; flex-direction: column;">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">
+                        IN/OUT
+                      </span>
+                    </div>
+                    <div>
+                      <select id="cars" name="status">
+                        <option value="IN">IN</option>
+                        <option value="OUT">OUT</option>
+                      </select>
+                    </div>
+                  </div>
+                </span> -->
+
+              <div class="justify-content-center">
+                <button type="submit" class="btn btn-danger btn-raised btn-lg">Submit</button>
+              </div>
+            </form>
+            
+            <form action="/scan_barcode" method="GET">
+              <button type="submit" class="btn btn-danger btn-raised btn-lg">Back</button>
+            </form>
+          </div>
+            <!-- <div style="padding-top: 7px;">
+              <label>Not registered?</label>
+              <a href="/student_signup" style="color: #f44336; ">Sign Up</a>
+              <br/>
+              <label>Forgot password?</label>
+              <a href="/forgot_password" style="color: #f44336;">Click here</a>
+            </div> -->
+            
+            
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

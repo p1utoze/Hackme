@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Team Details</title>
+     <link rel="stylesheet" href="{{ url_for('static', path='css/master_checkin.css') }}" />
+     <script src="static/js/master_checkin.js"></script>
+</head>
+<body>
+    <form action="POST" >
+    <div class="grid-container">
+    {% for message in Details: %}
+        {% for details in Details[message]: %}
+        <div class = "grid-item">
+            <h4> {{ details }} : 
+            <input class = "text_input" value= {{Details[message][details]}} required>
+        </div>
+    </div>
+    {% endfor %}
+  {% endfor %}
+    <br/>
+  <center><input id="cbox" type = "checkbox" required/> I have read the terms and conditions and accept it</center>
+
+<center style = "padding:15px;"><button value="Submit" onclick="checker()"> Submit</button><br/>
+</center>
+</form>
+</body>
+</html>
