@@ -46,16 +46,16 @@ templates = Jinja2Templates(directory="templates")
 
 
 
-def flash(request: Request, message: typing.Any, category: str = "primary") -> None:
-   if "_messages" not in request.session:
-       request.session["_messages"] = []
-       request.session["_messages"].append({"message": message, "category": category})
+# def flash(request: Request, message: typing.Any, category: str = "primary") -> None:
+#    if "_messages" not in request.session:
+#        request.session["_messages"] = []
+#        request.session["_messages"].append({"message": message, "category": category})
+#
+# def get_flashed_messages(request: Request):
+#    print(request.session)
+#    return request.session.pop("_messages") if "_messages" in request.session else []
 
-def get_flashed_messages(request: Request):
-   print(request.session)
-   return request.session.pop("_messages") if "_messages" in request.session else []
-
-templates.env.globals['get_flashed_messages'] = get_flashed_messages
+# templates.env.globals['get_flashed_messages'] = get_flashed_messages
 
 @app.on_event("startup")
 async def load_data():
@@ -71,46 +71,38 @@ async def home(request: Request):
 async def barcode_reader(request: Request):
     return templates.TemplateResponse('barcode_reader_page.html', {"request": request})
 
-@app.get("/scan_qr/", dependencies=[Depends(load_data)], response_class=HTMLResponse)
+@app.get("/register/", dependencies=[Depends(load_data)], response_class=HTMLResponse)
 async def add_entry(request: Request, uid: str):
-    # Registered partivipants
+
+    # Registered participants
     s = uid in g.df['UID'].tolist()
     if s:
-        # if uid in firestore
-        # Render check in check out
-        if list(query).__len__():
+        participants = "participants"  #
+        cursor = db.collection(participants)
+        query = cursor.where(filter=FieldFilter("UID", "in", [uid])).stream()      # Query the participant in firestore
+
+        if list(query).__len__():                       # Check if uid in firestore
             return templates.TemplateResponse('checkin_out.html', {'request': request, 'UID': uid})
+
         details = g.df.loc[g.df['UID'] == uid].to_json(orient='records')
-        # print(loads(details[1:-1]))
         doc = loads(details[1:-1])
         x = {'request': request, 'Team Member': 'Not Found', 'Details': doc}
-        participants = "participants"
-        # await db.collection(participants).document(doc['UID']).set(doc)
+        db.collection(participants).document(doc['UID']).set(doc)
         # return templates.TemplateResponse('master_checkin.html', x)
-        cursor = db.collection("participants").get()
-        # print(cursor[0].to_dict())
-        # print(UID[:3])
-        # print(UID[:5])
-        cursor = db.collection(participants)
-        print(uid)
-        # query = cursor.where("UID", "in", ["jflksdjflk"]).stream()
-        query = cursor.where(filter=FieldFilter("UID", "in", [uid])).stream()
-        print(list(query).__len__())
+        # cursor = db.collection(participants)
+        # # query = cursor.where("UID", "in", ["jflksdjflk"]).stream()
+        # query = cursor.where(filter=FieldFilter("UID", "in", [uid])).stream()
         for doc in query:
             print(f'{doc.id} => {doc.to_dict()}')
-
-        # for q in query:
-        #     print(q.to_dict())
-        # print("doc generator", cursor.to_dict())
-        # print("unpacked:", *query)
-        # for q in query:
-        #     print("doc", q.to_dict())
     else:
         # Invalid
-        pass
+        return {'Error': 'INVALID UID FOUND'}
 
 
-@app.get("/checkin_out")
+@app.post("/checkin_out")
 async def checkin_out(request: Request):
-    pass
+    try:
+        return {"API": "called successfully"}
+    except:
+        return {"Internal Error": "Problem in the code"}
 
