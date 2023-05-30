@@ -8,11 +8,10 @@ from fastapi.middleware.cors import CORSMiddleware
 import firebase_admin
 from firebase_admin import credentials, firestore, firestore_async
 from google.cloud.firestore_v1.base_query import FieldFilter
-import os, typing
+# import os, typing
 from api_globals import GlobalsMiddleware, g
 import pandas as pd
 from json import loads
-from routers import login
 
 cred = credentials.Certificate('aventus-website.json')
 firebase_admin.initialize_app(cred)
@@ -67,33 +66,32 @@ async def home(request: Request):
     return templates.TemplateResponse("login.html", {"request": request})
 
 
-@app.get("/barcode_reader", response_class=HTMLResponse)
-async def barcode_reader(request: Request):
-    return templates.TemplateResponse('barcode_reader_page.html', {"request": request})
-
-@app.get("/register/", dependencies=[Depends(load_data)], response_class=HTMLResponse)
+@app.get("/qr_scan/", dependencies=[Depends(load_data)], response_class=HTMLResponse)
 async def add_entry(request: Request, uid: str):
 
     # Registered participants
     s = uid in g.df['UID'].tolist()
     if s:
-        participants = "participants"  #
-        cursor = db.collection(participants)
-        query = cursor.where(filter=FieldFilter("UID", "in", [uid])).stream()      # Query the participant in firestore
-
-        if list(query).__len__():                       # Check if uid in firestore
-            return templates.TemplateResponse('checkin_out.html', {'request': request, 'UID': uid})
-
+        # participants = "participants"  #
+        # cursor = db.collection(participants)
+        # query = cursor.where(filter=FieldFilter("UID", "in", [uid])).stream()      # Query the participant in firestore
+        # query_len = list(query).__len__()
+        # print(f"query length: {query_len} {type(query_len)}")
+        # if query_len > 0:                       # Check if uid in firestore
+        #     print("Rendering checkin_checkout page...")
+        #     return templates.TemplateResponse('checkin_out.html', {'request': request, 'UID': uid})
+        #
         details = g.df.loc[g.df['UID'] == uid].to_json(orient='records')
         doc = loads(details[1:-1])
-        x = {'request': request, 'Team Member': 'Not Found', 'Details': doc}
-        db.collection(participants).document(doc['UID']).set(doc)
-        # return templates.TemplateResponse('master_checkin.html', x)
+        # print(doc)
+        payload = {'request': request, 'Team Member': 'Not Found', 'Details': doc}
+        # db.collection(participants).document(doc['UID']).set(doc)
+        return templates.TemplateResponse('master_checkin.html', payload)
         # cursor = db.collection(participants)
         # # query = cursor.where("UID", "in", ["jflksdjflk"]).stream()
         # query = cursor.where(filter=FieldFilter("UID", "in", [uid])).stream()
-        for doc in query:
-            print(f'{doc.id} => {doc.to_dict()}')
+        # for doc in query:
+        #     print(f'{doc.id} => {doc.to_dict()}')
     else:
         # Invalid
         return {'Error': 'INVALID UID FOUND'}
@@ -105,4 +103,6 @@ async def checkin_out(request: Request):
         return {"API": "called successfully"}
     except:
         return {"Internal Error": "Problem in the code"}
+
+# @app.post("/register/")
 

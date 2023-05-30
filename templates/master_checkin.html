@@ -5,22 +5,23 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Team Details</title>
-     <link rel="stylesheet" href="{{ url_for('static', path='css/master_checkin.css') }}" />
-     <script src="static/js/master_checkin.js"></script>
+     <link rel="stylesheet" href="{{url_for('static', path='css/master_checkin.css') }}" />
+     <script src="{{ url_for('static', path='js/master_checkin.js') }}"></script>
 </head>
 <body>
-    <form action="POST" >
+    <form method="POST" >
     <div class="grid-container">
-    {% for message in Details: %}
-        {% for details in Details[message]: %}
+        {% for key in Details: %}
+<!--        {% for details in Details[message]: %}-->
         <div class = "grid-item">
-            <h4> {{ details }} : 
-            <input class = "text_input" value= {{Details[message][details]}} required>
-            </h4>
+            <h3> hi </h3>
+            <h4> {{ key }} : </h4>
+            <input class = "text_input" value="{{ Details[key] }}" required>
         </div>
+        {% endfor %}
     </div>
-    {% endfor %}
-  {% endfor %}
+<!--    {% endfor %}-->
+
     <br/>
   <center><input id="cbox" type = "checkbox" required/> I have read the terms and conditions and accept it</center>
 
