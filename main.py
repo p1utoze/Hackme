@@ -1,25 +1,21 @@
 from __future__ import division
-from fastapi import FastAPI, Depends, Request, APIRouter, L
+from fastapi import FastAPI, Depends, Request, APIRouter
 from fastapi.templating import Jinja2Templates
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import RedirectResponse
 from fastapi.middleware.cors import CORSMiddleware
-
 import firebase_admin
 from firebase_admin import credentials, firestore
 import os, typing
 from api_globals import GlobalsMiddleware, g
 import pandas as pd
-from qrcode.image.pil import PilImage
 from json import loads
 
 cred = credentials.Certificate('aventus-website.json')
 firebase_admin.initialize_app(cred)
 
 db = firestore.client()
-
-__admin_users =
 
 firebaseConfig = {
   'apiKey': "AIzaSyDIerahYw7xS6madhWGYuvF2n8A3-VMUkg",
@@ -35,7 +31,7 @@ firebaseConfig = {
 app = FastAPI()
 router = APIRouter()
 
-allow_all = [*]
+allow_all = ['*']
 app.add_middleware(GlobalsMiddleware)
 app.add_middleware(
    CORSMiddleware,
@@ -74,32 +70,14 @@ async def home(request: Request):
 async def barcode_reader(request: Request):
     return templates.TemplateResponse('barcode_reader_page.html', {"request": request})
 
-@app.get("/register/", dependencies=[Depends(load_data)])
-async def add_entry(uid: str):
+@app.get("/scan_qr/", dependencies=[Depends(load_data)])
+async def add_entry(request: Request, uid: str):
     s = uid in g.df['UID'].tolist()
     if s:
-        details = loads(g.df.loc[g.df['UID'] == uid].to_json(orient='records'))
-        return {'Team Member': 'Found', 'Details': details[0]}
+        details = g.df.loc[g.df['UID'] == uid].to_json(orient='index')
+        # print(details)
+        x = {'request': request, 'Team Member': 'Found', 'Details': loads(details)}
+        print(x)
+        return templates.TemplateResponse('master_checkin.html', x)
     else:
         return {'Team Member': 'NOT Found'}
-
-@app.get("/login/")
-def login(request: Request):
-    return templates.TemplateResponse("auth/login.html", {"request": request})
-
-
-@app.post("/login/")
-async def login(request: Request, db: Session = Depends(get_db)):
-    form = LoginForm(request)
-    await form.load_data()
-    if await form.is_valid():
-        try:
-            form.__dict__.update(msg="Login Successful :)")
-            response = templates.TemplateResponse("auth/login.html", form.__dict__)
-            login_for_access_token(response=response, form_data=form, db=db)
-            return response
-        except HTTPException:
-            form.__dict__.update(msg="")
-            form.__dict__.get("errors").append("Incorrect Email or Password")
-            return templates.TemplateResponse("auth/login.html", form.__dict__)
-    return templates.TemplateResponse("auth/login.html", form.__dict__)
