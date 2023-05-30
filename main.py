@@ -12,6 +12,7 @@ from google.cloud.firestore_v1.base_query import FieldFilter
 from api_globals import GlobalsMiddleware, g
 import pandas as pd
 from json import loads
+from datetime import datetime
 
 cred = credentials.Certificate('aventus-website.json')
 firebase_admin.initialize_app(cred)
@@ -73,21 +74,16 @@ async def add_entry(request: Request, uid: str):
     # Registered participants
     s = uid in g.df['UID'].tolist()
     if s:
-        details = g.df.loc[g.df['UID'] == uid].to_json(orient='records')
-        doc = loads(details[1:-1])
-        doc['status'] = 0
-        member_status = "UNREGISTERED"
+
         participants = "participants"
         cursor = db.collection(participants)
         # print(cursor.get()[1].to_dict())
-        query = cursor.where(filter=FieldFilter("UID", "==", uid)).stream()
+        query = cursor.where(filter=FieldFilter("UID", "==", uid)).get()
 
         # query_len = list(query).__len__()
-        print(query)
-        data = {}
-        for doc in query:
-            data = doc.to_dict()
-            print(f'{doc.id} => {data}')
+
+        data = query[0].to_dict()
+        print(f'{query[0].id} => {data}')
 
         if data:                       # Check if uid in firestore
             print("Rendering checkin_checkout page...")
@@ -102,6 +98,10 @@ async def add_entry(request: Request, uid: str):
             #     cursor.document(uid).update({'status': "IN"})
             return templates.TemplateResponse('checkin_out.html', {'request': request, 'UID': uid, 'password': "aventus@6969"})
 
+        details = g.df.loc[g.df['UID'] == uid].to_json(orient='records')
+        doc = loads(details[1:-1])
+        doc['status'] = "NULL"
+        member_status = "UNREGISTERED"
         payload = {'request': request, 'Team Member': member_status, 'Details': doc}
         # db.collection(participants).document(uid).set(doc)
         return templates.TemplateResponse('master_checkin.html', payload)
@@ -118,14 +118,30 @@ async def add_entry(request: Request, uid: str):
 @app.post("/checkin_out/{uid}")
 async def checkin_out(request: Request, uid: str):
     print(uid)
-    return {"UID": uid}
-    try:
-        participants = "participants"
-        cursor = db.collection(participants)
-        # print(cursor.get()[1].to_dict())
-        query = cursor.where(filter=FieldFilter("UID", "==", uid)).stream()
-        return {"API": "called successfully"}
-    except:
-        print("ERROR")
-        return {"Internal Error": "Problem in the code"}
+    now = datetime.now()
+    entry_time = now.strftime("%d/%m/%Y %H:%M:%S")
+    # return {"UID": uid}
+    participants = "participants"
+    cursor = db.collection(participants)
+    query = cursor.where(filter=FieldFilter("UID", "==", uid)).get()
+    status = query[0].to_dict()['status']
+    # print(status)
+    print(status)
+    if status == "NULL":
+        print("Added status entry")
+        cursor.document(uid).update({'status': "IN"})
+        cursor.document(uid).update({'checkin': firestore.ArrayUnion([entry_time])})
+    elif status == "IN":
+        cursor.document(uid).update({'status': "OUT"})
+        cursor.document(uid).update({'checkout': firestore.ArrayUnion([entry_time])})
+    elif status == 'OUT':
+        cursor.document(uid).update({'status': "IN"})
+        cursor.document(uid).update({'checkin': firestore.ArrayUnion([entry_time])})
+    else:
+        print("wrong status")
+
+    # return {"API": "called successfully"}
+    # except:
+    #     print("ERROR")
+    #     return {"Internal Error": "Problem in the code"}
 
