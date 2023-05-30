@@ -1,8 +1,11 @@
 from __future__ import division
-from fastapi import FastAPI, Depends, Request, APIRouter
+from fastapi import FastAPI, Depends, Request, APIRouter, L
 from fastapi.templating import Jinja2Templates
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
+from fastapi.responses import RedirectResponse
+from fastapi.middleware.cors import CORSMiddleware
+
 import firebase_admin
 from firebase_admin import credentials, firestore
 import os, typing
@@ -15,6 +18,8 @@ cred = credentials.Certificate('aventus-website.json')
 firebase_admin.initialize_app(cred)
 
 db = firestore.client()
+
+__admin_users =
 
 firebaseConfig = {
   'apiKey': "AIzaSyDIerahYw7xS6madhWGYuvF2n8A3-VMUkg",
@@ -30,7 +35,15 @@ firebaseConfig = {
 app = FastAPI()
 router = APIRouter()
 
+allow_all = [*]
 app.add_middleware(GlobalsMiddleware)
+app.add_middleware(
+   CORSMiddleware,
+   allow_origins=allow_all,
+   allow_credentials=True,
+   allow_methods=allow_all,
+   allow_headers=allow_all
+)
 app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory="templates")
 
@@ -53,19 +66,43 @@ async def load_data():
 
 @app.get("/", dependencies=[Depends(load_data)], response_class=HTMLResponse)
 async def home(request: Request):
-    return templates.TemplateResponse("home.html", {"request": request})
+    # return templates.TemplateResponse("home.html", {"request": request})
+    return RedirectResponse("https://hackaventus.com/")
 
 
 @app.get("/hello/{name}")
 async def say_hello(name: str):
     return {"message": f"Hello {name}"}
 
+class LoginForm:
+    def __init__(self, request: Request):
+        self.request: Request = request
+        self.errors: List = []
+        self.username: Optional[str] = None
+        self.password: Optional[str] = None
+
+    async def load_data(self):
+        form = await self.request.form()
+        self.username = form.get(
+            "email"
+        )  # since outh works on username field we are considering email as username
+        self.password = form.get("password")
+
+    async def is_valid(self):
+        if not self.username or not (self.username.__contains__("@")):
+            self.errors.append("Email is required")
+        if not self.password or not len(self.password) >= 4:
+            self.errors.append("A valid password is required")
+        if not self.errors:
+            return True
+        return False
+
 
 @app.get("/barcode_reader", response_class=HTMLResponse)
 async def barcode_reader(request: Request):
     return templates.TemplateResponse('barcode_reader_page.html', {"request": request})
 
-@app.get("/scan_qr/", dependencies=[Depends(load_data)])
+@app.get("/register/", dependencies=[Depends(load_data)])
 async def add_entry(uid: str):
     s = uid in g.df['UID'].tolist()
     if s:
@@ -73,3 +110,24 @@ async def add_entry(uid: str):
         return {'Team Member': 'Found', 'Details': details[0]}
     else:
         return {'Team Member': 'NOT Found'}
+
+@app.get("/login/")
+def login(request: Request):
+    return templates.TemplateResponse("auth/login.html", {"request": request})
+
+
+@app.post("/login/")
+async def login(request: Request, db: Session = Depends(get_db)):
+    form = LoginForm(request)
+    await form.load_data()
+    if await form.is_valid():
+        try:
+            form.__dict__.update(msg="Login Successful :)")
+            response = templates.TemplateResponse("auth/login.html", form.__dict__)
+            login_for_access_token(response=response, form_data=form, db=db)
+            return response
+        except HTTPException:
+            form.__dict__.update(msg="")
+            form.__dict__.get("errors").append("Incorrect Email or Password")
+            return templates.TemplateResponse("auth/login.html", form.__dict__)
+    return templates.TemplateResponse("auth/login.html", form.__dict__)
