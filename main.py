@@ -6,7 +6,8 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.responses import RedirectResponse
 from fastapi.middleware.cors import CORSMiddleware
 import firebase_admin
-from firebase_admin import credentials, firestore
+from firebase_admin import credentials, firestore, firestore_async
+from google.cloud.firestore_v1.base_query import FieldFilter
 import os, typing
 from api_globals import GlobalsMiddleware, g
 import pandas as pd
@@ -17,17 +18,15 @@ cred = credentials.Certificate('aventus-website.json')
 firebase_admin.initialize_app(cred)
 
 db = firestore.client()
-
-firebaseConfig = {
-  'apiKey': "AIzaSyDIerahYw7xS6madhWGYuvF2n8A3-VMUkg",
-  'authDomain': "aventus-b0068.firebaseapp.com",
-  'databaseURL': "https://aventus-b0068-default-rtdb.asia-southeast1.firebasedatabase.app",
-  'projectId': "aventus-b0068",
-  'storageBucket': "aventus-b0068.appspot.com",
-  'messagingSenderId': "1004778993565",
-  'appId': "1:1004778993565:web:5ccb91f7a09dede0342174",
-  'measurementId': "G-LEE5266T98"
-}
+# firebaseConfig = {
+#   "apiKey": "AIzaSyBgT68Ra8QzLU6WkSgFTX0ws2Veupng7EE",
+#   "authDomain": "test-aventus.firebaseapp.com",
+#   "projectId": "test-aventus",
+#   "storageBucket": "test-aventus.appspot.com",
+#   "messagingSenderId": "330950556473",
+#   "appId": "1:330950556473:web:03f5b5c3071c20a56546e8",
+#   "measurementId": "G-0JVRVC3R7K"
+# };
 
 app = FastAPI()
 api_router = APIRouter()
@@ -72,14 +71,46 @@ async def home(request: Request):
 async def barcode_reader(request: Request):
     return templates.TemplateResponse('barcode_reader_page.html', {"request": request})
 
-@app.get("/scan_qr/", dependencies=[Depends(load_data)])
+@app.get("/scan_qr/", dependencies=[Depends(load_data)], response_class=HTMLResponse)
 async def add_entry(request: Request, uid: str):
+    # Registered partivipants
     s = uid in g.df['UID'].tolist()
     if s:
-        details = g.df.loc[g.df['UID'] == uid].to_json(orient='index')
-        # print(details)
-        x = {'request': request, 'Team Member': 'Found', 'Details': loads(details)}
-        print(x)
-        return templates.TemplateResponse('master_checkin.html', x)
+        # if uid in firestore
+        # Render check in check out
+        if list(query).__len__():
+            return templates.TemplateResponse('checkin_out.html', {'request': request, 'UID': uid})
+        details = g.df.loc[g.df['UID'] == uid].to_json(orient='records')
+        # print(loads(details[1:-1]))
+        doc = loads(details[1:-1])
+        x = {'request': request, 'Team Member': 'Not Found', 'Details': doc}
+        participants = "participants"
+        # await db.collection(participants).document(doc['UID']).set(doc)
+        # return templates.TemplateResponse('master_checkin.html', x)
+        cursor = db.collection("participants").get()
+        # print(cursor[0].to_dict())
+        # print(UID[:3])
+        # print(UID[:5])
+        cursor = db.collection(participants)
+        print(uid)
+        # query = cursor.where("UID", "in", ["jflksdjflk"]).stream()
+        query = cursor.where(filter=FieldFilter("UID", "in", [uid])).stream()
+        print(list(query).__len__())
+        for doc in query:
+            print(f'{doc.id} => {doc.to_dict()}')
+
+        # for q in query:
+        #     print(q.to_dict())
+        # print("doc generator", cursor.to_dict())
+        # print("unpacked:", *query)
+        # for q in query:
+        #     print("doc", q.to_dict())
     else:
-        return {'Team Member': 'NOT Found'}
+        # Invalid
+        pass
+
+
+@app.get("/checkin_out")
+async def checkin_out(request: Request):
+    pass
+
