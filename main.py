@@ -66,10 +66,13 @@ async def barcode_reader(request: Request):
     return templates.TemplateResponse('barcode_reader_page.html', {"request": request})
 
 @app.get("/scan_qr/", dependencies=[Depends(load_data)])
-async def add_entry(uid: str):
+async def add_entry(request: Request, uid: str):
     s = uid in g.df['UID'].tolist()
     if s:
-        details = loads(g.df.loc[g.df['UID'] == uid].to_json(orient='records'))
-        return {'Team Member': 'Found', 'Details': details[0]}
+        details = g.df.loc[g.df['UID'] == uid].to_json(orient='index')
+        # print(details)
+        x = {'request': request, 'Team Member': 'Found', 'Details': loads(details)}
+        print(x)
+        return templates.TemplateResponse('master_checkin.html', x)
     else:
         return {'Team Member': 'NOT Found'}
