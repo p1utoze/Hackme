@@ -6,17 +6,36 @@
 <body>
     <h1>Passkey Form</h1>
     <h2>Welcome {{ UID }}
-    <form method="post" action="/checkin_out">
-        <label for="passkey">Passkey:</label>
-        <input type="password" id="passkey" name="passkey" required>
-        <br><br>
+    <form method="post" action="/checkin_out" >
         <input type="radio" id="checkin" name="action" value="checkin" required>
         <label for="checkin">Check-in</label>
         <br>
         <input type="radio" id="checkout" name="action" value="checkout" required>
         <label for="checkout">Check-out</label>
         <br><br>
-        <input type="submit" value="Submit">
+        <label for="passkey">Passkey:</label>
+        <input type="password" id="passkey" name="passkey" required>
+        <br><br>
+        <input type="submit" value="Submit", onclick="verifyPassword()">
     </form>
+        <script>
+        function verifyPassword() {
+            event.preventDefault()
+            let passwordInput = document.getElementById("passkey").value;
+            const passphrase = "{{ password }}";  // Replace with your actual passphrase
+            console.log(passphrase);
+            console.log(passwordInput);
+            console.log(typeof passwordInput === passphrase)
+            if (passwordInput === passphrase) {
+                // Password matches, submit the form
+                document.forms[0].submit();
+
+            } else {
+                // Password doesn't match, display an error message or take appropriate action
+                alert("Incorrect password");
+            }
+        }
+    </script>
 </body>
+
 </html>

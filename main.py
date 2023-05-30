@@ -68,24 +68,42 @@ async def home(request: Request):
 
 @app.get("/qr_scan/", dependencies=[Depends(load_data)], response_class=HTMLResponse)
 async def add_entry(request: Request, uid: str):
-
+    uid = uid.strip()
+    print(f'"{uid}"')
     # Registered participants
     s = uid in g.df['UID'].tolist()
     if s:
-        # participants = "participants"  #
-        # cursor = db.collection(participants)
-        # query = cursor.where(filter=FieldFilter("UID", "in", [uid])).stream()      # Query the participant in firestore
-        # query_len = list(query).__len__()
-        # print(f"query length: {query_len} {type(query_len)}")
-        # if query_len > 0:                       # Check if uid in firestore
-        #     print("Rendering checkin_checkout page...")
-        #     return templates.TemplateResponse('checkin_out.html', {'request': request, 'UID': uid})
-        #
         details = g.df.loc[g.df['UID'] == uid].to_json(orient='records')
         doc = loads(details[1:-1])
-        # print(doc)
-        payload = {'request': request, 'Team Member': 'Not Found', 'Details': doc}
-        # db.collection(participants).document(doc['UID']).set(doc)
+        doc['status'] = 0
+        member_status = "UNREGISTERED"
+
+        participants = "participants"
+        cursor = db.collection(participants)
+        # print(cursor.get()[1].to_dict())
+        query = cursor.where(filter=FieldFilter("UID", "==", uid)).stream()
+        # query_len = list(query).__len__()
+        # print(query)
+        data = {}
+        for doc in query:
+            data = doc.to_dict()
+            print(f'{doc.id} => {data}')
+
+        if data:                       # Check if uid in firestore
+            print("Rendering checkin_checkout page...")
+            # cursor.document(uid).update({'checkin': firestore.ArrayUnion([13.00])})
+            # cursor.document(uid).update({'checkout': firestore.ArrayUnion([13.00])})
+            # print(data['status'])
+            # if data['status'] == 0:
+            #     cursor.document(uid).update({'status': "IN"})
+            # elif data['status'] == "IN":
+            #     cursor.document(uid).update({'status': "OUT"})
+            # elif data['status'] == 'OUT':
+            #     cursor.document(uid).update({'status': "IN"})
+            return templates.TemplateResponse('checkin_out.html', {'request': request, 'UID': uid, 'password': "aventus@6969"})
+
+        payload = {'request': request, 'Team Member': member_status, 'Details': doc}
+        db.collection(participants).document(uid).set(doc)
         return templates.TemplateResponse('master_checkin.html', payload)
         # cursor = db.collection(participants)
         # # query = cursor.where("UID", "in", ["jflksdjflk"]).stream()
@@ -100,9 +118,9 @@ async def add_entry(request: Request, uid: str):
 @app.post("/checkin_out")
 async def checkin_out(request: Request):
     try:
+        print("SUCCESS")
         return {"API": "called successfully"}
     except:
+        print("ERROR")
         return {"Internal Error": "Problem in the code"}
-
-# @app.post("/register/")
 
