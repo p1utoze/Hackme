@@ -11,6 +11,7 @@ import os, typing
 from api_globals import GlobalsMiddleware, g
 import pandas as pd
 from json import loads
+from routers import login
 
 cred = credentials.Certificate('aventus-website.json')
 firebase_admin.initialize_app(cred)
@@ -29,7 +30,8 @@ firebaseConfig = {
 }
 
 app = FastAPI()
-router = APIRouter()
+api_router = APIRouter()
+# api_router.include_router(login.router, prefix="", tags=["auth-webapp"])
 
 allow_all = ['*']
 app.add_middleware(GlobalsMiddleware)
@@ -63,7 +65,7 @@ async def load_data():
 @app.get("/", dependencies=[Depends(load_data)], response_class=HTMLResponse)
 async def home(request: Request):
     # return templates.TemplateResponse("home.html", {"request": request})
-    return RedirectResponse("https://hackaventus.com/")
+    return templates.TemplateResponse("login.html", {"request": request})
 
 
 @app.get("/barcode_reader", response_class=HTMLResponse)
