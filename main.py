@@ -3,12 +3,13 @@ from fastapi import FastAPI, Depends, Request, APIRouter
 from fastapi.templating import Jinja2Templates
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
+from fastapi.responses import RedirectResponse
+from fastapi.middleware.cors import CORSMiddleware
 import firebase_admin
 from firebase_admin import credentials, firestore
 import os, typing
 from api_globals import GlobalsMiddleware, g
 import pandas as pd
-from qrcode.image.pil import PilImage
 from json import loads
 
 cred = credentials.Certificate('aventus-website.json')
@@ -30,7 +31,15 @@ firebaseConfig = {
 app = FastAPI()
 router = APIRouter()
 
+allow_all = ['*']
 app.add_middleware(GlobalsMiddleware)
+app.add_middleware(
+   CORSMiddleware,
+   allow_origins=allow_all,
+   allow_credentials=True,
+   allow_methods=allow_all,
+   allow_headers=allow_all
+)
 app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory="templates")
 
@@ -53,12 +62,8 @@ async def load_data():
 
 @app.get("/", dependencies=[Depends(load_data)], response_class=HTMLResponse)
 async def home(request: Request):
-    return templates.TemplateResponse("home.html", {"request": request})
-
-
-@app.get("/hello/{name}")
-async def say_hello(name: str):
-    return {"message": f"Hello {name}"}
+    # return templates.TemplateResponse("home.html", {"request": request})
+    return RedirectResponse("https://hackaventus.com/")
 
 
 @app.get("/barcode_reader", response_class=HTMLResponse)
