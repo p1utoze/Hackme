@@ -1,40 +1,39 @@
-body {
-    background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
-    background-size: 400% 400%;
-    height: 100vh;
-}
-*{
-    font-size: 17px;
+@import url(https://fonts.googleapis.com/css?family=Raleway:300,400,600);
+
+
+body{
+    margin: 0;
+    font-size: .9rem;
+    font-weight: 400;
+    line-height: 1.6;
+    color: #000000;
+    text-align: left;
+    background: url("../img/desk_chair1.jpg");
+    background-repeat: None;
+    background-size: cover;
+
 }
 
-.grid-container {
-    padding: 8px;
-    align-items: center;
-    align-content: center;
+.my-form
+{
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
 }
-.grid-item {
-    font-variant: small-caps;
-    font-size: 20px;
-    font-family:'Times New Roman', Times, serif;
-    text-align: center;
-    align-items: center;
-    align-content: center;
-    /* color:whitesmoke; */
+
+.my-form .row
+{
+    margin-left: 0;
+    margin-right: 0;
 }
-.cbox{
-    display:flex;
-    align-items: center;
-    align-content: center;
+
+.login-form
+{
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
 }
-body {
-    background-color: rgb(115, 109, 109);
-    /* background: linear-gradient(from red, black, green) ; */
-}   
-.text_input{
-    border-color: rgb(171, 30, 30);
-    background:None;
-    border-radius: 10px;
-}
-button{
-    background: linear-gradient(-45deg, #52eeca, #06eeb8,#23d567 );
+
+.login-form .row
+{
+    margin-left: 0;
+    margin-right: 0;
 }

@@ -14,6 +14,8 @@ from api_globals import GlobalsMiddleware, g
 import pandas as pd
 from json import loads
 import time
+from routers.login_form import LoginForm
+
 import firebase
 import requests
 # import pyrebase
@@ -79,6 +81,7 @@ class LoginCredentials(BaseModel):
     email: str
     password: str
 
+      
 def check_participant(uid=None, is_admin=None):
     if not uid:
         # SEND PAYLOAD FOR RENDERING list_teams.html
@@ -121,6 +124,7 @@ def check_participant(uid=None, is_admin=None):
         print(doc)
         # db.collection(participants).document(uid).set(doc)
         # return templates.TemplateResponse('master_checkin.html', payload)
+        
     else:
         # Invalid
         return "INVALID UID", {'Error': 'INVALID UID FOUND'},
