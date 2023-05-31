@@ -72,14 +72,14 @@ async def add_entry(request: Request, uid: str):
     # Registered participants
     s = uid in g.df['UID'].tolist()
     if s:
-        # participants = "participants"  #
-        # cursor = db.collection(participants)
-        # query = cursor.where(filter=FieldFilter("UID", "in", [uid])).stream()      # Query the participant in firestore
-        # query_len = list(query).__len__()
+        participants = "participants"  #
+        cursor = db.collection(participants)
+        query = cursor.where(filter=FieldFilter("UID", "in", [uid])).stream()      # Query the participant in firestore
+        query_len = list(query).__len__()
         # print(f"query length: {query_len} {type(query_len)}")
-        # if query_len > 0:                       # Check if uid in firestore
-        #     print("Rendering checkin_checkout page...")
-        #     return templates.TemplateResponse('checkin_out.html', {'request': request, 'UID': uid})
+        if query_len > 0:                       # Check if uid in firestore
+            print("Rendering checkin_checkout page...")
+            return templates.TemplateResponse('checkin_out.html', {'request': request, 'UID': uid})
         #
         details = g.df.loc[g.df['UID'] == uid].to_json(orient='records')
         doc = loads(details[1:-1])

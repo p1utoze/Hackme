@@ -33,22 +33,20 @@
                             <span style="font-variant: small-caps;font-weight: bold;font-size: larger;">Master Check-In</span>
                             </div>
                           </center>
-                            <form name="my-form" onsubmit="return validform()" action="POST">
-
-                              {% for message in Details: %}
-                              {% for details in Details[message]: %}
+                            <form name="my-form" onsubmit="return validform()" method="POST">
+                              {% for details in Details: %}
                                   <div class="form-group row">
                                       <label for="full_name" class="col-md-4 col-form-label text-md-right">{{details}} : </label>
                                         <div class="col-md-6">
-                                          <input type="text" class="form-control" value= "{{Details[message][details]}}" style="color:black" required>
+                                          <input type="text" class="form-control" value= "{{Details[details]}}" style="color:black" required>
                                         </div>
                                   </div>
-                                    {% endfor %}
-                                    {% endfor %}
+                              {% endfor %}
+
                                     <br/>
                                     <div class="col-md-6 offset-md-3">
                                       <input class="tc_box" type="checkbox"  required />
-                                      I have read the Terms & Conditions
+                                      I have accepted the terms & conditions
                                     </div>
                                     <br/>
                                     <div class="col-md-6 offset-md-4">
