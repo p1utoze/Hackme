@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <nav class="navbar navbar-color-on-scroll navbar-transparent    fixed-top  navbar-expand-lg " color-on-scroll="100" id="sectionsNav">
+        <div class="container">
+          <div class="navbar-translate">
+            <div class="navbar-brand">
+              <H2>CURRENT STATUS</H2>
+            </div>
+          </div>
+          <!-- <form action="/logout" method="GET">
+            <button type="submit" class="btn btn-danger btn-raised btn-lg">Log Out</button>
+          </form> -->
+        </div>
+      </nav>
+      <div class="page-header header-filter header-small" data-parallax="true" style="background-image: url('../static/img/desk_chair1.jpg');">
+        <div class="container">
+          <div class="row">
+            <div class="col-md-8 ml-auto mr-auto text-center">
+              <h2 class="title">{{ team_name }}'s Dashboard</h2>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="main main-raised">
+        <div class="container">
+          <div class="card card-plain">
+            <div class="card-body">
+              <br />
+              
+              <div class="table-responsive">
+                {% for i in range(member_ids|length): %}
+                <h3 class="title">{{ member_ids[i] }} {{member_names[i]}}</h3>
+                <table class="table table-shopping table-striped">
+                  {% set status=all_timings[member_ids[i]] %}
+                  <thead>
+                    <tr>
+                      <!-- <th>Date</th> -->
+                      <th class="text-center">Status</th>
+                      <th class="text-center">Time</th>
+                      
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for j in range(status|length): %}
+                      <tr>
+                        <td class="td-name">
+                         {{ status[j][0] }}
+                        </td>
+                        <td class="td-name">
+                          {{ status[j][1] }}
+                         </td>
+                      </tr>
+                      {% endfor %}
+                    </tbody>
+                  </table>
+                </div>
+                {% endfor %}
+    
+            </div>
+          </div>
+        </div>
+      </div>
+</body>
+</html>
