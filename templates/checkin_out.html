@@ -11,34 +11,14 @@
     <!-- <link rel="stylesheet" href="{{ url_for('static', path='css/master_checkin.css') }}" /> -->
 </head>
 <body>
-    <!-- <form method="post" action="/checkin_out">
-        <label for="passkey">Passkey:</label>
-        <input type="password" id="passkey" name="passkey" required>
-        <br><br>
-        <input type="radio" id="checkin" name="action" value="checkin" required>
-        <label for="checkin">Check-in</label>
-        <br>
-        <input type="radio" id="checkout" name="action" value="checkout" required>
-        <label for="checkout">Check-out</label>
-        <br><br>
-        <input type="submit" value="Submit">
-    </form> -->
-    
-    <form method="post" action="/checkin_out/{{ UID }}">
-        <input type="password" class="input" placeholder="passPhrase" required>
+    <form method="post" action="/checkin_out/{{ UID }}" >
+        <input type="password" class="input" placeholder="Password" required>
         <div class="line-box">
             <div class="line"></div>
         </div>
         <br/><br/><br/><br/><br/>
-        <table style="width:100%;">
-        <tr style="font-size:x-large;">
-            <td> <input type="radio" name="checked" value="Check-in" id="check_in" required/>Check-in </td>
-            <td> <input type="radio" name="checked" value="Check-out" id="check_out"/> Check-out </td> 
-        </tr>
-    </table>
-    <br/><br/><br/><br/><br/>
     <script src="../static/js/checkin_out.js"></script>
-    <button type="submit" onsubmit="checker()">submit</button>
-      </form>
+    <button type="submit" onsubmit="verifyPassword()">Submit</button>
+    </form>
 </body>
 </html>
