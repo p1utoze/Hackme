@@ -37,20 +37,10 @@ OPIN07,OPIN07-01,MALLESH,C N,Male,Presidency University Bangalore,8147774743,cnm
 OPIN07,OPIN07-02,Harsha,Gowda R,Male,Presidency University Bangalore,9513005221,harshagowda1317@gmail.com,ONYX-Vikasana,Open Innovation
 OPIN07,OPIN07-03,Thushar,R,Male,Presidency University Bangalore,7022486221,thushar.r02@gmail.com,ONYX-Vikasana,Open Innovation
 OPIN07,OPIN07-04,Mohammad,Aman,Male,Presidency University Bangalore,9663798874,mohammadaman055@gmail.com,ONYX-Vikasana,Open Innovation
-OPIN08,OPIN08-01,Abhishek,Kumar,Male,Rungta College of Engineering and Technology,9119206459,jhaabhishekkumar49@gmail.com,The Reactors,Open Innovation
-OPIN08,OPIN08-02,Amanjeet,Kumar pal,Male,Rungta College of Engineering and Technology,6203736744,amanjeetkumarpal0432@gmail.com,The Reactors,Open Innovation
-OPIN08,OPIN08-03,VAIBHAV,P,Male,Rungta College of Engineering and Technology,7000984388,pvaibhavofficial@gmail.com,The Reactors,Open Innovation
-OPIN08,OPIN08-04,Alok,Kumar,Male,Rungta College of Engineering and Technology,8340175751,alokkumar11746@gmail.com,The Reactors,Open Innovation
 OPIN09,OPIN09-01,Manisha,Kumari,Female,Cmr Institute of Technology,9606746147,2021maku243@gmail.com,Kinetic Knights,Open Innovation
 OPIN09,OPIN09-02,Kamaljeeth,Anand,Male,Cmr Institute of Technology,7676005386,anand.kamaljeeth@gmail.com,Kinetic Knights,Open Innovation
 OPIN09,OPIN09-03,Sunil,Kumar P,Male,Cmr Institute of Technology,9964297599,sunilkpg23@gmail.com,Kinetic Knights,Open Innovation
 OPIN09,OPIN09-04,Louise,Patra,Male,Cmr Institute of Technology,9664361362,rocklouis055@gmail.com,Kinetic Knights,Open Innovation
-OPIN10,OPIN10-01,Vighnesh,Mestry,Male,St. Francis Institute of Technology (engg. College),7045266885,mestryvighnesh27@gmail.com,Encryptors,Open Innovation
-OPIN10,OPIN10-02,Joel,Devasia,Male,St. Francis Institute of Technology (engg. College),9137783394,joeldevasia1962002@gmail.com,Encryptors,Open Innovation
-OPIN10,OPIN10-03,Parbat,Rajpurohit,Male,St. Francis Institute of Technology (engg. College),9372397615,prajpurohit680@gmail.com,Encryptors,Open Innovation
-OPIN10,OPIN10-04,Parth,Barai,Male,St. Francis Institute of Technology (engg. College),9372269353,parthnbarai1234@gmail.com,Encryptors,Open Innovation
-OPIN11,OPIN11-01,Birat,Datta,Male,Jain University,6009344713,birat.datta26@gmail.com,Team404,Open Innovation
-OPIN11,OPIN11-02,Anish,Kumar,Male,Jain University,8709857096,anishthegreat91221@gmail.com,Team404,Open Innovation
 OPIN12,OPIN12-01,Hussain,Afroz,Male,Bangalore Institute of Technology,9569849117,hussainafroz903@gmail.com,Bitwiz,Open Innovation
 OPIN12,OPIN12-02,Manish,Gond,Male,Bangalore Institute of Technology,7619352224,manish.n.gond@gmail.com,Bitwiz,Open Innovation
 OPIN12,OPIN12-03,SAI SANDEEP,KOLLIPARA,Male,Bangalore Institute of Technology,9059446766,ksai11122002@gmail.com,Bitwiz,Open Innovation
@@ -77,9 +67,6 @@ IOT03,IOT03-01,Vinit,Singroha,Male,Netaji Subhas Institute of Technology,9355566
 IOT03,IOT03-02,Rithik,Kumar,Male,"Netaji Subhas University Of Technology, Delhi",8528878498,rithik.ug20@nsut.ac.in,Kaivalya,IoT
 IOT04,IOT04-01,Akshay,Prasad,Male,Bnm Institute of Technology,7204021634,w4rl0ckm0nk3y@protonmail.com,Lucifer,IoT
 IOT04,IOT04-02,Adithya,Manjunath,Male,Bnm Institute of Technology,8147190095,adithyam211@gmail.com,Lucifer,IoT
-IOT05,IOT05-01,ABHAY,SIRISH B.R,Male,Dayananda Sagar College of Engineering,8277271627,abhaysirish1@gmail.com,One and Zero,IoT
-IOT05,IOT05-02,Ananya,Yakkundi,Male,Dayananda Sagar College of Engineering,9611655482,ananyahero4@gmail.com,One and Zero,IoT
-IOT05,IOT05-03,Ajeet,Yankanchi,Male,Dayananda Sagar College of Engineering,8431858788,ajeetmy502@gmail.com,One and Zero,IoT
 AIML01,AIML01-01,Prateek,Bhat,Male,Jyothy Institute of Technology,9019532230,prateekbhat07@gmail.com,MedInterp,AI&ML
 AIML01,AIML01-02,Sharaj,Kornaya,Male,Jyothy Institute of Technology,9481128759,sharajkornaya2359@gmail.com,MedInterp,AI&ML
 AIML01,AIML01-03,Sahana,Somani,Female,Jyothy Institute of Technology,9731809270,sahanavsomani@gmail.com,MedInterp,AI&ML
@@ -137,6 +124,6 @@ OPIN17,OPIN17-01,VIPLOVE,PARSAI,Male,DY Patil University,9179518690,gautam.bhaws
 OPIN17,OPIN17-02,ABHISHEK,SHARMA,Male,DY Patil University,9657322724,2001abhishek17@gmail.com,Code To Compile,Open innovation
 OPIN17,OPIN17-03,RAHUL,MOHATA,Male,DY Patil University,9328108739,coc92636@gmail.com,Code To Compile,Open innovation
 OPIN17,OPIN17-04,GAUTAM,BHAWSAR,Male,DY Patil University,8269605224,gautam.bhawsar8269@gmail.com,Code To Compile,Open innovation
-OPIN18,OPIN18-01Vaibhav,,Gowda G P,Male,Ramaiah Institute Of Technology,7483847878,vaibhavgp148@gmail.com,Me and the Bois,Open innovation
+OPIN18,OPIN18-01,Vaibhav,Gowda G P,Male,Ramaiah Institute Of Technology,7483847878,vaibhavgp148@gmail.com,Me and the Bois,Open innovation
 OPIN18,OPIN18-02,Prahladh,N C,Male,Bmsce,7760424521,prahladh2003@gmail.com,Me and the Bois,Open innovation
 OPIN18,OPIN18-03,Niranjan,S,Male,RV College Of Engineering,9916851349,niranjan.s.2k3@gmail.com,Me and the Bois,Open innovation

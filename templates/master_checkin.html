@@ -21,7 +21,9 @@
     <title>Master Check-In</title>
 </head>
 <body>
-
+<div>
+    <h4 style="color:green">{{ Details }}</h4>
+</div>
 <main class="my-form" style="background: None;">
     <div class="cotainer">
         <div class="row justify-content-center">
@@ -33,12 +35,12 @@
                             <span style="font-variant: small-caps;font-weight: bold;font-size: larger;">Master Check-In</span>
                             </div>
                           </center>
-                            <form name="my-form" onsubmit="return validform()" method="POST">
+                            <form name="my-form" onsubmit="return validform()" method="POST" action="/register/">
                               {% for details in Details: %}
                                   <div class="form-group row">
-                                      <label for="full_name" class="col-md-4 col-form-label text-md-right">{{details}} : </label>
+                                      <label for="full_name" class="col-md-4 col-form-label text-md-right"> {{details}} </label>
                                         <div class="col-md-6">
-                                          <input type="text" class="form-control" value= "{{Details[details]}}" style="color:black" required>
+                                          <input type="text" id="{{ details }}"class="form-control" value= "{{Details[details]}}" style="color:black" required>
                                         </div>
                                   </div>
                               {% endfor %}
