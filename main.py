@@ -81,9 +81,13 @@ async def add_entry(request: Request, uid: str):
         query = cursor.where(filter=FieldFilter("UID", "==", uid)).get()
 
         # query_len = list(query).__len__()
+        try:
+            data = query[0].to_dict()
+            print(f'{query[0].id} => {data}')
+        except IndexError:
+            data = {}
+            print("No data found")
 
-        data = query[0].to_dict()
-        print(f'{query[0].id} => {data}')
 
         if data:                       # Check if uid in firestore
             print("Rendering checkin_checkout page...")
@@ -117,7 +121,7 @@ async def add_entry(request: Request, uid: str):
 
 @app.post("/checkin_out/{uid}")
 async def checkin_out(request: Request, uid: str):
-    print(uid)
+    # print(uid)
     # now = datetime.now()
     # entry_time = now.strftime("%d/%m/%Y %H:%M:%S ")
     entry_time = time.strftime("%d/%m/%Y %I:%M:%S %p", time.gmtime(time.time() + 19800))
@@ -125,15 +129,17 @@ async def checkin_out(request: Request, uid: str):
     cursor = db.collection(participants)
     query = cursor.where(filter=FieldFilter("UID", "==", uid)).get()
     status = query[0].to_dict()['status']
-    print(status)
+    # print(status)
     if status == "NULL":
-        print("Added status entry")
+        print("Added status entry: IN")
         cursor.document(uid).update({'status': "IN"})
         cursor.document(uid).update({'checkin': firestore.ArrayUnion([entry_time])})
     elif status == "IN":
+        print("Added status entry: OUT")
         cursor.document(uid).update({'status': "OUT"})
         cursor.document(uid).update({'checkout': firestore.ArrayUnion([entry_time])})
     elif status == 'OUT':
+        print("Added status entry: IN")
         cursor.document(uid).update({'status': "IN"})
         cursor.document(uid).update({'checkin': firestore.ArrayUnion([entry_time])})
     else:
@@ -143,4 +149,11 @@ async def checkin_out(request: Request, uid: str):
     # except:
     #     print("ERROR")
     #     return {"Internal Error": "Problem in the code"}
+
+@app.post("register/{uid}")
+async def register(request: Request, uid: str):
+    # db.collection(participants).document(uid).set(doc)
+    return {"API": 'WORKING'}
+
+
 
