@@ -1,20 +1,26 @@
 from __future__ import division
-from fastapi import FastAPI, Depends, Request, APIRouter
+from fastapi import FastAPI, Depends, Request, APIRouter, Form
 from fastapi.templating import Jinja2Templates
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import RedirectResponse
 from fastapi.middleware.cors import CORSMiddleware
 import firebase_admin
-from firebase_admin import credentials, firestore, auth
+from pydantic import BaseModel
+from firebase_admin import credentials, firestore
 from google.cloud.firestore_v1.base_query import FieldFilter
 # import os, typing
 from api_globals import GlobalsMiddleware, g
 import pandas as pd
 from json import loads
 import time
+import firebase
+import requests
 # import pyrebase
 from routers.login_form import LoginForm
+from fastapi.responses import JSONResponse
+
+
 
 cred = credentials.Certificate('aventusauth.json')
 firebase_admin.initialize_app(cred)
@@ -39,9 +45,19 @@ db = firestore.client()
 #   "measurementId": "G-CBDJE2FYYZ",
 #   "databaseURL": ""
 # }
+firebaseConfig = {
+  "apiKey": "AIzaSyBq2PUePkbjGHpYr8LxycuUIOIri-9KjTQ",
+  "authDomain": "aventusauth.firebaseapp.com",
+  "databaseURL": "https://aventusauth-default-rtdb.firebaseio.com",
+  "projectId": "aventusauth",
+  "storageBucket": "aventusauth.appspot.com",
+  "messagingSenderId": "629066554537",
+  "appId": "1:629066554537:web:95d99df7082809151bddb8",
+  "measurementId": "G-FXSXEHPRSR"
+};
 
-# firebase = pyrebase.initialize_app(firebaseConfig)
-# auth = auth()
+firebase_app = firebase.initialize_app(firebaseConfig)
+auth = firebase_app.auth()
 
 app = FastAPI()
 api_router = APIRouter()
@@ -59,69 +75,25 @@ app.add_middleware(
 app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory="templates")
 
+class LoginCredentials(BaseModel):
+    email: str
+    password: str
 
-
-# def flash(request: Request, message: typing.Any, category: str = "primary") -> None:
-#    if "_messages" not in request.session:
-#        request.session["_messages"] = []
-#        request.session["_messages"].append({"message": message, "category": category})
-#
-# def get_flashed_messages(request: Request):
-#    print(request.session)
-#    return request.session.pop("_messages") if "_messages" in request.session else []
-
-# templates.env.globals['get_flashed_messages'] = get_flashed_messages
-
-@app.on_event("startup")
-async def load_data():
-    g.df = pd.read_csv('teams.csv')
-
-@app.get("/", dependencies=[Depends(load_data)], response_class=HTMLResponse)
-async def home(request: Request):
-    # return templates.TemplateResponse("status_result.html", {"request": request})
-    return templates.TemplateResponse("login.html", {"request": request})
-
-# @app.get("/some")
-# async def kuchbhi(request: Request):
-#     login = auth.sign_in_with_email_and_password("mani@gmail.com", "wrong")  # Assuming email is a unique identifier
-#     print(login)
-#     return {"API chutiya": "dada"}
-
-# @app.post("/")
-# async def login(request: Request):
-#     form = LoginForm(request)
-#     await form.load_data()
-#     if await form.is_valid():
-#         try:
-#             # form._dict_.update(msg="Login Successful :)")
-#             login= auth.sign_in_with_email_and_password(form.username, form.password) # Assuming email is a unique identifier
-#             print(login)
-#             firebase_token = login['idToken']
-#             # Redirect to the "/scan/" route
-#             response = templates.TemplateResponse("login.html", form._dict_)
-#             response.set_cookie(key="firebase_token", value=firebase_token)
-#             return response
-#         except:
-#             form._dict_.update(msg="")
-#             form._dict_.get("errors").append("Incorrect Email or Password")
-#             return templates.TemplateResponse("login.html", form._dict_)
-#     return templates.TemplateResponse("login.html", form._dict_)
-
-
-@app.get("/qr_scan/", dependencies=[Depends(load_data)], response_class=HTMLResponse)
-async def add_entry(request: Request, uid: str):
+def check_participant(uid=None, is_admin=None):
+    if not uid:
+        # SEND PAYLOAD FOR RENDERING list_teams.html
+        return "NULL UID"
+    return "UID exists"
     uid = uid.strip()
+
     print(f'"{uid}"')
     # Registered participants
     s = uid in g.df['UID'].tolist()
     if s:
-
         participants = "participants"
         cursor = db.collection(participants)
-        # print(cursor.get()[1].to_dict())
         query = cursor.where(filter=FieldFilter("UID", "==", uid)).get()
 
-        # query_len = list(query).__len__()
         try:
             data = query[0].to_dict()
             print(f'{query[0].id} => {data}')
@@ -132,21 +104,69 @@ async def add_entry(request: Request, uid: str):
         # Check if uid in firestore
         if data:
             print("Rendering checkin_checkout page...")
-            status =  "NOT CHECKED"
-            return templates.TemplateResponse(
-                'checkin_out.html', {'request': request, 'UID': uid, 'password': "aventus@6969", "status": status})
+            status = "NOT CHECKED"
+            # return status, {'UID': uid}
+            if request.cookies.get('firebase_token'):
+                pass
+                # return templates.TemplateResponse(
+                # 'checkin_out.html', {'request': request, 'UID': uid, 'password': "aventus@6969", "status": status})
+            # return templates.TemplateResponse(
+            #                 'checkin_out.html', {'request': request, 'UID': uid, 'password': "aventus@6969", "status": status})
 
         details = g.df.loc[g.df['UID'] == uid].to_json(orient='records')
         doc = loads(details[1:-1])
         doc['status'] = "NULL"
         member_status = "UNREGISTERED"
-        payload = {'request': request, 'Team Member': member_status, 'Details': doc}
+        # payload = {'request': request, 'Team Member': member_status, 'Details': doc}
         print(doc)
-        db.collection(participants).document(uid).set(doc)
-        return templates.TemplateResponse('master_checkin.html', payload)
+        # db.collection(participants).document(uid).set(doc)
+        # return templates.TemplateResponse('master_checkin.html', payload)
     else:
         # Invalid
-        return {'Error': 'INVALID UID FOUND'}
+        return "INVALID UID", {'Error': 'INVALID UID FOUND'},
+
+@app.on_event("startup")
+async def load_data():
+    g.df = pd.read_csv('teams.csv')
+
+
+@app.get("/")
+async def home(request: Request, uid: str = None):
+    # return templates.TemplateResponse("status_result.html", {"request": request})
+    firebase_user_id = request.cookies.get('firebase_token')
+    if not firebase_user_id:
+        return templates.TemplateResponse("login.html", {"request": request})
+        # return {"THUS": "THIS"}
+    out = check_participant(uid)
+    # output = check_participant(uid=uid)
+    return {"OUTPUT" : out, "UID": uid}
+    #
+
+@app.post("/")
+async def kuchbhi(response: LoginCredentials, uid: str = None):
+    # HANDLE FOR INCORRECT LOGIN CREDENTIAL
+    user = auth.sign_in_with_email_and_password(response.email, response.password)
+
+    response = JSONResponse(content={})
+    response.set_cookie(key="firebase_token", value=user['idToken'], secure=True, httponly=True, samesite='none')
+    output = check_participant(uid=uid)
+    return {'output': output}
+
+
+@app.get("/demo/")
+async def scan_route(request: Request):
+    firebase_user_id = request.cookies.get('firebase_token')
+    print(firebase_user_id)
+    return {"message": f"Scan route accessed by user: {firebase_user_id}"}
+
+
+
+@app.get("/qr_scan/", dependencies=[Depends(load_data)], response_class=HTMLResponse)
+async def add_entry(request: Request, uid: str):
+    member_status = check_participant(uid)
+
+    return templates.TemplateResponse("login.html", {"request": request})
+
 
 
 @app.post("/checkin_out/{uid}")
@@ -187,8 +207,21 @@ async def checkin_out(request: Request, uid: str):
     #     print("ERROR")
     #     return {"Internal Error": "Problem in the code"}
 
-@app.post("register/{uid}")
-async def register(request: Request, uid: str):
+@app.post("/register")
+async def register(track: str= Form(), team_id:str= Form()):
+    team_members=[]
+    doc=db.collection('participants')
+    query = doc.where(filter=FieldFilter('teamCode', "==", "AIML01")).stream()
+    try:
+        print(query)
+        for d in query:
+            print(f'{d.id} => {d.to_dict()}')
+    except IndexError:
+        data = {}
+        print("No data found")
+    # team_name=data
+    # print(data, team_name)
+
     # db.collection(participants).document(uid).set(doc)
     return {"API": 'WORKING'}
 
