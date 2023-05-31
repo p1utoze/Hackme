@@ -1,4 +1,3 @@
-<!--% extends "shared/base.html" %}-->
 
 {% block title %}
   <title>Login</title>
@@ -7,7 +6,7 @@
 {% block content %}
   <div class="container">
     <div class="row">
-      <h5 class="display-5">Login to JobBoard</h5>
+      <h5 class="display-5">ADMIN PANEL</h5>
       <div class="text-danger font-weight-bold">
           {% for error in errors %}
             <li>{{error}}</li>
@@ -36,6 +35,9 @@
         </div>
         <button type="submit" class="btn btn-primary">Submit</button>
       </form>
+    </div>
+    <div class="row my-3">
+      <a href="/logout/" class="btn btn-danger">Logout</a>
     </div>
   </div>
   {% endblock %}
