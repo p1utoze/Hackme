@@ -12,7 +12,7 @@ from google.cloud.firestore_v1.base_query import FieldFilter
 from api_globals import GlobalsMiddleware, g
 import pandas as pd
 from json import loads
-from datetime import datetime
+import time
 
 cred = credentials.Certificate('aventus-website.json')
 firebase_admin.initialize_app(cred)
@@ -118,14 +118,13 @@ async def add_entry(request: Request, uid: str):
 @app.post("/checkin_out/{uid}")
 async def checkin_out(request: Request, uid: str):
     print(uid)
-    now = datetime.now()
-    entry_time = now.strftime("%d/%m/%Y %H:%M:%S")
-    # return {"UID": uid}
+    # now = datetime.now()
+    # entry_time = now.strftime("%d/%m/%Y %H:%M:%S ")
+    entry_time = time.strftime("%d/%m/%Y %I:%M:%S %p", time.gmtime(time.time() + 19800))
     participants = "participants"
     cursor = db.collection(participants)
     query = cursor.where(filter=FieldFilter("UID", "==", uid)).get()
     status = query[0].to_dict()['status']
-    # print(status)
     print(status)
     if status == "NULL":
         print("Added status entry")
