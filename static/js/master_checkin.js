@@ -70,7 +70,7 @@ function validform() {
         alert("Please Enter Your NID Number");
         return false;
     }
-    fetch('http://127.0.0.1:8000/register/', {
+    fetch('https://aventus-hackaventus.b4a.run/register/', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
