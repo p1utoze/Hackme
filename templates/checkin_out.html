@@ -6,7 +6,8 @@
 <body>
     <h1>Passkey Form</h1>
     <h2>Welcome {{ UID }} </h2>
-    <form method="post" action="/checkin_out/{{ UID }}" >
+<!--    {% if status=="NOT CHECKED" %}-->
+    <form method="post" action="/checkin_out/{{ UID }}" onsubmit="return false" >
 <!--        <input type="hidden" name="uid" value="{{ UID }}" />-->
 <!--        <input type="radio" id="checkin" name="action" value="checkin" required>-->
 <!--        <label for="checkin">Check-in</label>-->
@@ -19,9 +20,14 @@
         <br><br>
         <input type="submit" value="Submit", onclick="verifyPassword()">
     </form>
+<!--    {% else %}-->
+<!--    <div>-->
+<!--        <p>Current Status::-{{ status_val }}</p>-->
+<!--    </div>-->
+<!--    {% endif %}-->
         <script>
         function verifyPassword() {
-            event.preventDefault()
+            // event.preventDefault()
             let passwordInput = document.getElementById("passkey").value;
             const passphrase = "{{ password }}";  // Replace with your actual passphrase
             console.log(passphrase);
