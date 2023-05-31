@@ -1,9 +1,7 @@
-from __future__ import division
 from fastapi import FastAPI, Depends, Request, APIRouter, Form
 from fastapi.templating import Jinja2Templates
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
-from fastapi.responses import RedirectResponse
 from fastapi.middleware.cors import CORSMiddleware
 import firebase_admin
 from pydantic import BaseModel
@@ -20,7 +18,7 @@ import firebase
 import requests
 # import pyrebase
 from routers.login_form import LoginForm
-from fastapi.responses import JSONResponse
+from fastapi.responses import Response, RedirectResponse, JSONResponse, HTMLResponse
 
 
 
@@ -85,8 +83,7 @@ class LoginCredentials(BaseModel):
 def check_participant(uid=None, is_admin=None):
     if not uid:
         # SEND PAYLOAD FOR RENDERING list_teams.html
-        return "NULL UID"
-    return "UID exists"
+        return 602
     uid = uid.strip()
 
     print(f'"{uid}"')
@@ -106,11 +103,12 @@ def check_participant(uid=None, is_admin=None):
 
         # Check if uid in firestore
         if data:
-            print("Rendering checkin_checkout page...")
-            status = "NOT CHECKED"
+            print("ALREADY REGISTERED USER. REDIRECTING TO CHECKIN...")
+            return 600
+        print("NOT REGISTERED. REDIRECTING TO REGISTRATION...")
+        return 601
             # return status, {'UID': uid}
-            if request.cookies.get('firebase_token'):
-                pass
+
                 # return templates.TemplateResponse(
                 # 'checkin_out.html', {'request': request, 'UID': uid, 'password': "aventus@6969", "status": status})
             # return templates.TemplateResponse(
@@ -131,103 +129,216 @@ def check_participant(uid=None, is_admin=None):
 
 @app.on_event("startup")
 async def load_data():
-    g.df = pd.read_csv('teams.csv')
+    g.df = pd.read_csv('Final_List.csv')
 
-
-@app.get("/")
+@app.get("/", response_class=HTMLResponse)
 async def home(request: Request, uid: str = None):
-    # return templates.TemplateResponse("status_result.html", {"request": request})
     firebase_user_id = request.cookies.get('firebase_token')
-    if not firebase_user_id:
-        return templates.TemplateResponse("login.html", {"request": request})
+    if firebase_user_id:
+        return templates.TemplateResponse("update.html", {"request": request})
         # return {"THUS": "THIS"}
-    out = check_participant(uid)
+    # out = check_participant(uid)
     # output = check_participant(uid=uid)
-    return {"OUTPUT" : out, "UID": uid}
-    #
+    # return {"OUTPUT": "Bruh", "UID": uid}
+    return templates.TemplateResponse("login.html", {"request": request})
 
-@app.post("/")
-async def kuchbhi(response: LoginCredentials, uid: str = None):
+
+# @app.post("/")
+# async def kuchbhi(response: LoginCredentials, uid: str = None):
+#     # HANDLE FOR INCORRECT LOGIN CREDENTIAL
+#     user = auth.sign_in_with_email_and_password(response.email, response.password)
+#     print(user)
+#     responsess = JSONResponse(content={})
+#     responsess.set_cookie(key="firebase_token", value=user['idToken'], secure=True, httponly=True, samesite='none')
+#     # output = check_participant(uid=uid)
+#     return {'output': 'helloworld'}
+
+@app.post("/", response_class=HTMLResponse)
+async def kuchbhi(response: Response, email: str = Form(), password: str = Form(), uid: str = None, ):
     # HANDLE FOR INCORRECT LOGIN CREDENTIAL
-    user = auth.sign_in_with_email_and_password(response.email, response.password)
-
-    response = JSONResponse(content={})
-    response.set_cookie(key="firebase_token", value=user['idToken'], secure=True, httponly=True, samesite='none')
-    output = check_participant(uid=uid)
-    return {'output': output}
+    # print(email, password)
+    try:
+        user = auth.sign_in_with_email_and_password(email, password)
+        print(user)
+        # response = JSONResponse(content={})
+        # response.status_code = 200
+        response.set_cookie(key="firebase_token", value=user['idToken'], secure=True, httponly=True, samesite='none'
+                            )
+        #
+        # print(response.body)
+        # return "/regis"
+        return """
+            <html>
+            <head>
+                <title>Login</title>
+            </head>
+            <body>
+                <h1 style="color:green">Login Successful!</h1>
+                <br>
+                <h3>Please refresh the page again or go to previous page</h3>
+            </body>
+            </html>
+            """
+        # return templates.TemplateResponse("update.html", {"request": request})
+    except requests.exceptions.HTTPError as e:
+        err_message = loads(e.strerror)['error']['message']
+        print("THIS ERROR", err_message)
+        return f'''
+        <html>
+            <head>
+                <title>Login</title>
+            </head>
+            <body>
+                <h1 style="color:red">Login Failed!</h1>
+                <br>
+                <h3>{err_message}</h3>
+                <br><br>
+                <h4><i>Refresh again or go to previous page</i></h4>
+            </body>
+            </html>'''
+        # return templates.TemplateResponse("login.html", {"request": request, 'error': err_message})
+    # output = check_participant(uid=uid)
+    # return {'output': output}
 
 
 @app.get("/demo/")
 async def scan_route(request: Request):
     firebase_user_id = request.cookies.get('firebase_token')
-    print(firebase_user_id)
-    return {"message": f"Scan route accessed by user: {firebase_user_id}"}
-
+    print("SEXY", firebase_user_id)
+    return {"BLA": "BAA"}
+    # print(help(RedirectResponse))
+    # return {"message": f"Scan route accessed by user: {firebase_user_id}"}
 
 
 @app.get("/qr_scan/", dependencies=[Depends(load_data)], response_class=HTMLResponse)
 async def add_entry(request: Request, uid: str):
-    member_status = check_participant(uid)
+    if not request.cookies.get('firebase_token'):
+        return templates.TemplateResponse('login.html', {"request": request})
+    member_status_code = check_participant(uid)
+    if member_status_code == 600:
+        entry_time = time.strftime("%d/%m/%Y %I:%M:%S %p", time.gmtime(time.time() + 19800))
+        participants = "participants"
+        cursor = db.collection(participants)
+        query = cursor.where(filter=FieldFilter("UID", "==", uid)).get()
+        data = query[0].to_dict()
+        status_val = None
+        try:
+            if data['status'] == "NULL":
+                print("Added status entry: IN")
+                cursor.document(uid).update({'status': "IN"})
+                cursor.document(uid).update({'checkin': firestore.ArrayUnion([entry_time])})
+            elif data['status'] == "IN":
+                print("Added status entry: OUT")
+                cursor.document(uid).update({'status': "OUT"})
+                cursor.document(uid).update({'checkout': firestore.ArrayUnion([entry_time])})
+            elif data['status'] == 'OUT':
+                print("Added status entry: IN")
+                cursor.document(uid).update({'status': "IN"})
+                cursor.document(uid).update({'checkin': firestore.ArrayUnion([entry_time])})
+        except:
+            print("wrong status")
+        finally:
+            # payload = {'request': Request, "details": data, "status_value": status_val, "status": "CHECKED"}
+            return templates.TemplateResponse("status_result.html",
+                                              {"request": request,
+                                               "status": data['status'],
+                                               "fname": data['firstName'],
+                                               "lname": data['lastName']})
+    elif member_status_code == 601:
+        details = g.df.loc[g.df['UID'] == uid].to_json(orient='records')
+        doc = loads(details[1:-1])
+        doc['status'] = "NULL"
 
-    return templates.TemplateResponse("login.html", {"request": request})
+        return templates.TemplateResponse('master_checkin.html', {"request": request, "Details": doc})
+
+
 
 
 
 @app.post("/checkin_out/{uid}")
 async def checkin_out(request: Request, uid: str):
+    pass
     # print(uid)
     # now = datetime.now()
     # entry_time = now.strftime("%d/%m/%Y %H:%M:%S ")
-    entry_time = time.strftime("%d/%m/%Y %I:%M:%S %p", time.gmtime(time.time() + 19800))
-    participants = "participants"
-    cursor = db.collection(participants)
-    query = cursor.where(filter=FieldFilter("UID", "==", uid)).get()
-    data = query[0].to_dict()
-    status_val = None
-    try:
-        if data['status'] == "NULL":
-            print("Added status entry: IN")
-            status_val = "IN"
-            cursor.document(uid).update({'status': "IN"})
-            cursor.document(uid).update({'checkin': firestore.ArrayUnion([entry_time])})
-        elif data['status'] == "IN":
-            print("Added status entry: OUT")
-            status_val = "OUT"
-            cursor.document(uid).update({'status': "OUT"})
-            cursor.document(uid).update({'checkout': firestore.ArrayUnion([entry_time])})
-        elif data['status'] == 'OUT':
-            print("Added status entry: IN")
-            status_val = "IN"
-            cursor.document(uid).update({'status': "IN"})
-            cursor.document(uid).update({'checkin': firestore.ArrayUnion([entry_time])})
-    except:
-        print("wrong status")
-    finally:
-        # payload = {'request': Request, "details": data, "status_value": status_val, "status": "CHECKED"}
-        return {"API": "WORKS"}
+    # entry_time = time.strftime("%d/%m/%Y %I:%M:%S %p", time.gmtime(time.time() + 19800))
+    # participants = "participants"
+    # cursor = db.collection(participants)
+    # query = cursor.where(filter=FieldFilter("UID", "==", uid)).get()
+    # data = query[0].to_dict()
+    # status_val = None
+    # try:
+    #     if data['status'] == "NULL":
+    #         print("Added status entry: IN")
+    #         cursor.document(uid).update({'status': "IN"})
+    #         cursor.document(uid).update({'checkin': firestore.ArrayUnion([entry_time])})
+    #     elif data['status'] == "IN":
+    #         print("Added status entry: OUT")
+    #         cursor.document(uid).update({'status': "OUT"})
+    #         cursor.document(uid).update({'checkout': firestore.ArrayUnion([entry_time])})
+    #     elif data['status'] == 'OUT':
+    #         print("Added status entry: IN")
+    #         cursor.document(uid).update({'status': "IN"})
+    #         cursor.document(uid).update({'checkin': firestore.ArrayUnion([entry_time])})
+    # except:
+    #     print("wrong status")
+    # finally:
+    #     # payload = {'request': Request, "details": data, "status_value": status_val, "status": "CHECKED"}
+    #     return {"API": "WORKS"}
 
     # return {"API": "called successfully"}
     # except:
     #     print("ERROR")
     #     return {"Internal Error": "Problem in the code"}
 
-@app.post("/register")
-async def register(track: str= Form(), team_id:str= Form()):
-    team_members=[]
-    doc=db.collection('participants')
-    query = doc.where(filter=FieldFilter('teamCode', "==", "AIML01")).stream()
+@app.post("/status", response_class=HTMLResponse)
+async def register(request: Request, track: str = Form(), team_id: str = Form()):
+    member_ids=[]
+    member_names = []
+    all_timings = []
+    status_list = []
+    team_name = None
+    doc = db.collection('participants')
+    query = doc.where(filter=FieldFilter('teamCode', "==", team_id)).stream()
     try:
-        print(query)
+        # print(query)
         for d in query:
-            print(f'{d.id} => {d.to_dict()}')
+            # print(d.__dict__)
+            details = d.to_dict()
+            # print(details)
+            member_ids.append(details['UID'])
+            member_names.append(" ".join([details['firstName'], details['lastName']]))
+            if not team_name:
+                team_name = details['teamName']
+            all_timings.append({'IN': details.get('checkin', " "), "OUT": details.get('checkout', "")})
+            status_list.append(details['status'])
+            # print(f'{d.id} => {d.to_dict()}')
+
+        print(member_names, member_ids, all_timings, status_list)
+        payload = {
+            'request': request,
+            'team_name': team_name,
+            'member_ids': member_ids,
+            'member_names': member_names,
+            'all_timings': all_timings,
+            'status_list': status_list
+        }
+        return templates.TemplateResponse('list_teams.html', payload)
+        # return {"API": 'WORKING'}
+
     except IndexError:
         data = {}
         print("No data found")
     # team_name=data
     # print(data, team_name)
-
     # db.collection(participants).document(uid).set(doc)
-    return {"API": 'WORKING'}
 
-
+@app.post("/register/")
+async def register(request: Request):
+    # body = await request.json()
+    # print(body)
+    details = g.df.loc[g.df['UID'] == uid].to_json(orient='records')
+    doc = loads(details[1:-1])
+    doc['status'] = "NULL"
+    return {'REGISTRATION': "WORKS"}
 

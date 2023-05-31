@@ -35,33 +35,41 @@
               <br />
               
               <div class="table-responsive">
-                {% for i in range(member_ids|length): %}
-                <h3 class="title">{{ member_ids[i] }} {{member_names[i]}}</h3>
+<!--                <h3 class="title">{{ member_ids[i] }} {{member_names[i]}}</h3>-->
+                <h4 class="display-4"> {{ status_list[i] }}</h4>
                 <table class="table table-shopping table-striped">
-                  {% set status=all_timings[member_ids[i]] %}
                   <thead>
                     <tr>
-                      <!-- <th>Date</th> -->
-                      <th class="text-center">Status</th>
-                      <th class="text-center">Time</th>
-                      
+                      <th class="text-center">MEMBER ID</th>
+                      <th class="text-center">MEMBER NAME</th>
+                      <th class="text-center">CURRENT STATUS</th>
+                      <th class="text-left">CHECKIN</th>
+                      <th class="text-left">CHECKOUT</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {% for j in range(status|length): %}
+                    {% for i in range(member_ids|length): %}
                       <tr>
-                        <td class="td-name">
-                         {{ status[j][0] }}
-                        </td>
-                        <td class="td-name">
-                          {{ status[j][1] }}
-                         </td>
+                        <td class="text-center" >{{ member_ids[i] }} </td>
+                        <td class="text-center">{{ member_names[i] }} </td>
+                        <td class="text-center">{{ status_list[i] }}</td>
+                        {% for time in all_timings[i]['IN'] %}
+                          <td class="text-left">{{ time }}</td>
+                        {% endfor %}
+
+                        {% for time in all_timings[i]['OUT'] %}
+                          <td class="text-left">{{ time }}</td>
+                        {% endfor %}
                       </tr>
-                      {% endfor %}
+                    {% endfor %}
                     </tbody>
+
                   </table>
                 </div>
-                {% endfor %}
+
+
+
+
     
             </div>
           </div>

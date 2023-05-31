@@ -33,7 +33,7 @@
         <div class="container">
           <div class="row">
             <div class="col-lg-4 col-md-6 col-sm-8 ml-auto mr-auto">
-              <form class="form" method="POST" action="/register/">
+              <form class="form" method="POST" action="/status">
                 <div class="card card-login">
                   <h2 class="card-title text-center">Select Team ID and Team track</h2>
                   <!-- <div class="social-line">
@@ -42,13 +42,7 @@
                     </a>
                   </div> -->
                   <div class="card-body ">
-                    {% with messages = get_flashed_messages() %}
-                      {% if messages: %}
-                        {% for message in messages: %}
-                          <h4>{{ message }}</h4>
-                        {% endfor %}
-                      {% endif %}
-                    {% endwith %}
+
                     <span class="bmd-form-group">
                       <div class="input-group">
                         <div class="input-group-prepend">

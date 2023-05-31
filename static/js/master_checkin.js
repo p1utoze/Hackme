@@ -1,15 +1,28 @@
 function validform() {
-
-    var a = document.forms["my-form"]["Team Code"].value;
+    var a = document.forms["my-form"]["teamCode"].value;
     var b = document.forms["my-form"]["UID"].value;
-    var c = document.forms["my-form"]["First Name"].value;
-    var d = document.forms["my-form"]["Last Name"].value;
-    var e = document.forms["my-form"]["Gender"].value;
-    var f = document.forms["my-form"]["College"].value;
-    var g = document.forms["my-form"]["Ph. No"].value;
-    var h = document.forms["my-form"]["Email"].value;
-    var i = document.forms["my-form"]["Team Name"].value;
-    var j = document.forms["my-form"]["Project Tracks"].value;
+    var c = document.forms["my-form"]["firstName"].value;
+    var d = document.forms["my-form"]["lastName"].value;
+    var e = document.forms["my-form"]["gender"].value;
+    var f = document.forms["my-form"]["college"].value;
+    var g = document.forms["my-form"]["phNo"].value;
+    var h = document.forms["my-form"]["email"].value;
+    var i = document.forms["my-form"]["teamName"].value;
+    var j = document.forms["my-form"]["projectTracks"].value;
+
+    data = {
+        "teamCode": a,
+        "UID": b,
+        "firstName": c,
+        "lastName": d,
+        "gender": e,
+        "college": f,
+        "phNo": g,
+        "email": h,
+        "teamName": i,
+        "projectTracks": j}
+
+    console.log(data);
 
     if (a==null || a=="")
     {
@@ -57,6 +70,20 @@ function validform() {
         alert("Please Enter Your NID Number");
         return false;
     }
+    fetch('http://127.0.0.1:8000/register/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    })
+        .then(response => response.json())
+  .then(data => {
+    console.log(data);
+  })
+  .catch(error => {
+    console.error('Error:', error);
+  });
     return true;
 
 }
