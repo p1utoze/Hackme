@@ -333,12 +333,13 @@ async def register(request: Request, track: str = Form(), team_id: str = Form())
     # print(data, team_name)
     # db.collection(participants).document(uid).set(doc)
 
+
 @app.post("/register/")
-async def register(request: Request):
+async def register():
     # body = await request.json()
     # print(body)
-    details = g.df.loc[g.df['UID'] == uid].to_json(orient='records')
-    doc = loads(details[1:-1])
-    doc['status'] = "NULL"
+    # details = g.df.loc[g.df['UID'] == uid].to_json(orient='records')
+    # doc = loads(details[1:-1])
+    # doc['status'] = "NULL"
     return {'REGISTRATION': "WORKS"}
 

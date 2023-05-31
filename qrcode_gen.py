@@ -4,14 +4,14 @@ import os
 # from qrcode.main import s
 import pandas as pd
 
-df = pd.read_csv("teams.csv")
+df = pd.read_csv("Final_List.csv")
 
 def generate_qr(uid, fname):
     name = fname.split()
     fname = name[0]
     q = qrcode.QRCode(version=4, error_correction=qrcode.constants.ERROR_CORRECT_H,
                               box_size=3, border=5)
-    q.add_data("https://testaventus-adityanawati.b4a.run/scan_qr/?uid=WEB01-01")
+    q.add_data(f"https://aventus-hackaventus.b4a.run/qr_scan/?uid={uid}")
     q.make(fit=True)
     img = q.make_image(fill_color="black", back_color="white").convert('RGB')
     logo = Image.open("../../Pictures/juice wrld/DoggoWRLD.jpeg")
@@ -30,7 +30,7 @@ def generate_qr(uid, fname):
     img.save(f"qrcodes/{uid}.png")
 
 
-for uid, fname in zip(df["UID"].to_list(), df["First Name"].to_list()):
+for uid, fname in zip(df["UID"].to_list(), df["firstName"].to_list()):
     generate_qr(uid, fname)
 # center_size = int(qr_width * 0.25)  # Adjust the percentage as needed
 # logo = logo.resize((center_size, center_size))
