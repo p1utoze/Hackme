@@ -17,15 +17,13 @@
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
-
     <title>Master Check-In</title>
 </head>
 <body>
-<div>
-    <h4 style="color:green">{{ Details }}</h4>
-</div>
+
+<script src="{{ url_for('static', path='js/master_checkin.js') }}"></script>
 <main class="my-form" style="background: None;">
-    <div class="cotainer">
+    <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-8">
                     <div class="card">
@@ -35,15 +33,31 @@
                             <span style="font-variant: small-caps;font-weight: bold;font-size: larger;">Master Check-In</span>
                             </div>
                           </center>
-                            <form name="my-form" onsubmit="return validform()" method="POST" action="/register/">
-                              {% for details in Details: %}
+                            <form name="my-form" onsubmit="return true" method="POST" action="/register/{{ Details['UID'] }}">
                                   <div class="form-group row">
-                                      <label for="full_name" class="col-md-4 col-form-label text-md-right"> {{details}} </label>
+                                      <label for="UID" class="col-md-4 col-form-label text-md-right"> UID </label>
                                         <div class="col-md-6">
-                                          <input type="text" id="{{ details }}"class="form-control" value= "{{Details[details]}}" style="color:black" required>
+                                          <input type="text" id="UID" class="form-control" value= "{{Details['UID']}}" style="color:black" required>
                                         </div>
                                   </div>
-                              {% endfor %}
+                                  <div class="form-group row">
+                                      <label for="UID" class="col-md-4 col-form-label text-md-right"> UID </label>
+                                        <div class="col-md-6">
+                                          <input type="text" id="" class="form-control" value= "{{Details['UID']}}" style="color:black" required>
+                                        </div>
+                                  </div>
+                                <div class="form-group row">
+                                      <label for="UID" class="col-md-4 col-form-label text-md-right"> UID </label>
+                                        <div class="col-md-6">
+                                          <input type="text" id="UID" class="form-control" value= "{{Details['UID']}}" style="color:black" required>
+                                        </div>
+                                  </div>
+                                <div class="form-group row">
+                                      <label for="UID" class="col-md-4 col-form-label text-md-right"> UID </label>
+                                        <div class="col-md-6">
+                                          <input type="text" id="UID" class="form-control" value= "{{Details['UID']}}" style="color:black" required>
+                                        </div>
+                                  </div>
 
                                     <br/>
                                     <div class="col-md-6 offset-md-3">
@@ -52,7 +66,7 @@
                                     </div>
                                     <br/>
                                     <div class="col-md-6 offset-md-4">
-                                        <button type="submit" class="btn btn-primary">
+                                        <button type="submit" id="form_submit" class="btn btn-primary">
                                         Register
                                         </button>
                                     </div>
