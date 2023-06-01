@@ -163,7 +163,7 @@ async def kuchbhi(response: Response, email: str = Form(), password: str = Form(
         # response = JSONResponse(content={})
         # response.status_code = 200
         response.set_cookie(key="firebase_token", value=user['idToken'], secure=True, httponly=True, samesite='none')
-        base_url = "http://127.0.0.1:8000/"
+        base_url = "https://aventus-hackaventus.b4a.run/"
         # print(response.body)
         # return "/regis"
         return f"""
@@ -213,7 +213,7 @@ async def scan_route(request: Request):
 @app.get("/qr_scan/", dependencies=[Depends(load_data)], response_class=HTMLResponse)
 async def add_entry(request: Request, uid: str):
     if not request.cookies.get('firebase_token'):
-        base_url = "http://127.0.0.1:8000/"
+        base_url = "https://aventus-hackaventus.b4a.run/"
         return templates.TemplateResponse('login.html', {"request": request, "redirect": True, "base_url": base_url})
     member_status_code = check_participant(uid)
     if member_status_code == 600:
