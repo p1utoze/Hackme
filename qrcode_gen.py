@@ -11,7 +11,7 @@ def generate_qr(uid, fname):
     fname = name[0]
     q = qrcode.QRCode(version=4, error_correction=qrcode.constants.ERROR_CORRECT_H,
                               box_size=3, border=5)
-    q.add_data(f"https://aventus-hackaventus.b4a.run/qr_scan/?uid={uid}")
+    q.add_data(f"https://aventus-participant-manager.onrender.com/scan_barcode/{uid}")
     q.make(fit=True)
     img = q.make_image(fill_color="black", back_color="white").convert('RGB')
     logo = Image.open("../../Pictures/juice wrld/DoggoWRLD.jpeg")
@@ -24,10 +24,10 @@ def generate_qr(uid, fname):
     )
     font = ImageFont.truetype(font=font_path, size=9)
     # draw.text((qr_width - (qr_width * 0.10), qr_height - (qr_height * 0.10)), "", font=font, fill=(0,0,0,1))
-    draw.text((qr_width - (qr_width * 0.91), qr_height - (qr_height * 0.09)), "{0}  {1}".format(uid, fname), font=font,
+    draw.text((qr_width - (qr_width * 0.875), qr_height - (qr_height * 0.10)), "{0}  {1}".format(uid, fname), font=font,
               fill=(0, 0, 0, 1))
     print(f"{uid}")
-    img.save(f"qrcodes/{uid}.png")
+    img.save(f"qrcodes_avirup/{uid}.png")
 
 
 for uid, fname in zip(df["UID"].to_list(), df["firstName"].to_list()):

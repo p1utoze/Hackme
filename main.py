@@ -162,15 +162,15 @@ async def kuchbhi(response: Response, email: str = Form(), password: str = Form(
         print(user)
         # response = JSONResponse(content={})
         # response.status_code = 200
-        response.set_cookie(key="firebase_token", value=user['idToken'], secure=True, httponly=True, samesite='none'
-                            )
-        #
+        response.set_cookie(key="firebase_token", value=user['idToken'], secure=True, httponly=True, samesite='none')
+        base_url = "http://127.0.0.1:8000/"
         # print(response.body)
         # return "/regis"
-        return """
+        return f"""
             <html>
             <head>
                 <title>Login</title>
+                <meta http-equiv = "refresh" content = "3; url = { base_url }" 
             </head>
             <body>
                 <h1 style="color:green">Login Successful!</h1>
@@ -213,7 +213,8 @@ async def scan_route(request: Request):
 @app.get("/qr_scan/", dependencies=[Depends(load_data)], response_class=HTMLResponse)
 async def add_entry(request: Request, uid: str):
     if not request.cookies.get('firebase_token'):
-        return templates.TemplateResponse('login.html', {"request": request})
+        base_url = "http://127.0.0.1:8000/"
+        return templates.TemplateResponse('login.html', {"request": request, "redirect": True, "base_url": base_url})
     member_status_code = check_participant(uid)
     if member_status_code == 600:
         entry_time = time.strftime("%d/%m/%Y %I:%M:%S %p", time.gmtime(time.time() + 19800))
@@ -255,41 +256,6 @@ async def add_entry(request: Request, uid: str):
 
 
 
-@app.post("/checkin_out/{uid}")
-async def checkin_out(request: Request, uid: str):
-    pass
-    # print(uid)
-    # now = datetime.now()
-    # entry_time = now.strftime("%d/%m/%Y %H:%M:%S ")
-    # entry_time = time.strftime("%d/%m/%Y %I:%M:%S %p", time.gmtime(time.time() + 19800))
-    # participants = "participants"
-    # cursor = db.collection(participants)
-    # query = cursor.where(filter=FieldFilter("UID", "==", uid)).get()
-    # data = query[0].to_dict()
-    # status_val = None
-    # try:
-    #     if data['status'] == "NULL":
-    #         print("Added status entry: IN")
-    #         cursor.document(uid).update({'status': "IN"})
-    #         cursor.document(uid).update({'checkin': firestore.ArrayUnion([entry_time])})
-    #     elif data['status'] == "IN":
-    #         print("Added status entry: OUT")
-    #         cursor.document(uid).update({'status': "OUT"})
-    #         cursor.document(uid).update({'checkout': firestore.ArrayUnion([entry_time])})
-    #     elif data['status'] == 'OUT':
-    #         print("Added status entry: IN")
-    #         cursor.document(uid).update({'status': "IN"})
-    #         cursor.document(uid).update({'checkin': firestore.ArrayUnion([entry_time])})
-    # except:
-    #     print("wrong status")
-    # finally:
-    #     # payload = {'request': Request, "details": data, "status_value": status_val, "status": "CHECKED"}
-    #     return {"API": "WORKS"}
-
-    # return {"API": "called successfully"}
-    # except:
-    #     print("ERROR")
-    #     return {"Internal Error": "Problem in the code"}
 
 @app.post("/status", response_class=HTMLResponse)
 async def register(request: Request, track: str = Form(), team_id: str = Form()):
@@ -329,17 +295,40 @@ async def register(request: Request, track: str = Form(), team_id: str = Form())
     except IndexError:
         data = {}
         print("No data found")
-    # team_name=data
-    # print(data, team_name)
-    # db.collection(participants).document(uid).set(doc)
 
 
-@app.post("/register/")
-async def register():
-    # body = await request.json()
-    # print(body)
-    # details = g.df.loc[g.df['UID'] == uid].to_json(orient='records')
-    # doc = loads(details[1:-1])
-    # doc['status'] = "NULL"
-    return {'REGISTRATION': "WORKS"}
+class UserRegister(BaseModel):
+    UID: str
+
+
+@app.post("/register/{UID}", dependencies=[Depends(load_data)], response_class=HTMLResponse)
+async def register(request: Request, UID: str):
+    try:
+        print("RESPOND SUCCESS ", g.df.shape)
+        details = g.df.loc[g.df['UID'] == UID].to_json(orient='records')
+        doc = loads(details[1:-1])
+        doc['status'] = "NULL"
+        db.collection("participants").document(UID).set(doc)
+        return """
+            <html>
+            <head>
+                <title>REGISTRATION</title>
+            </head>
+            <body style="background-color:green">
+                <h1>Registration Completed!</h1>
+            </body>
+            </html>
+            """
+    except:
+        return """
+        <html>
+            <head>
+                <title>REGISTRATION</title>
+            </head>
+            <body style="background-color:red">
+                <h1>Registration Failed!</h1>
+            </body>
+            </html>
+    #         """
+
 
