@@ -1,6 +1,7 @@
+import gunicorn.app.wsgiapp
+import uvicorn
 from fastapi import FastAPI, Depends, Request, APIRouter, Form
 from fastapi.templating import Jinja2Templates
-from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 import firebase_admin
@@ -12,56 +13,32 @@ from api_globals import GlobalsMiddleware, g
 import pandas as pd
 from json import loads
 import time
-from routers.login_form import LoginForm
 
 import firebase
 import requests
 # import pyrebase
-from routers.login_form import LoginForm
 from fastapi.responses import Response, RedirectResponse, JSONResponse, HTMLResponse
 
 
-
 cred = credentials.Certificate('aventusauth.json')
-firebase_admin.initialize_app(cred)
-
+fir_app = firebase_admin.initialize_app(cred)
 db = firestore.client()
-# firebaseConfig = {
-#   "apiKey": "AIzaSyBgT68Ra8QzLU6WkSgFTX0ws2Veupng7EE",
-#   "authDomain": "test-aventus.firebaseapp.com",
-#   "projectId": "test-aventus",
-#   "storageBucket": "test-aventus.appspot.com",
-#   "messagingSenderId": "330950556473",
-#   "appId": "1:330950556473:web:03f5b5c3071c20a56546e8",
-#   "measurementId": "G-0JVRVC3R7K"
-# };
-# firebaseConfig = {
-#   "apiKey": "AIzaSyBq2PUePkbjGHpYr8LxycuUIOIri-9KjTQ",
-#   "authDomain": "aventusauth.firebaseapp.com",
-#   "projectId": "aventusauth",
-#   "storageBucket": "aventusauth.appspot.com",
-#   "messagingSenderId": "629066554537",
-#   "appId": "1:629066554537:web:3c9ab2209d641e9f1bddb8",
-#   "measurementId": "G-CBDJE2FYYZ",
-#   "databaseURL": ""
-# }
 firebaseConfig = {
-  "apiKey": "AIzaSyBq2PUePkbjGHpYr8LxycuUIOIri-9KjTQ",
-  "authDomain": "aventusauth.firebaseapp.com",
-  "databaseURL": "https://aventusauth-default-rtdb.firebaseio.com",
-  "projectId": "aventusauth",
-  "storageBucket": "aventusauth.appspot.com",
-  "messagingSenderId": "629066554537",
-  "appId": "1:629066554537:web:95d99df7082809151bddb8",
-  "measurementId": "G-FXSXEHPRSR"
+  "apiKey": "AIzaSyDYt2Mj95NipbFOhBMb3jDsdUoXi7YFFUc",
+  "authDomain": "hackme-60c66.firebaseapp.com",
+  "databaseURL": "https://hackme-60c66-default-rtdb.asia-southeast1.firebasedatabase.app",
+  "projectId": "hackme-60c66",
+  "storageBucket": "hackme-60c66.appspot.com",
+  "messagingSenderId": "505276403628",
+  "appId": "1:505276403628:web:4e292a5a0395c348543409",
+  "measurementId": "G-QR40ZRVFT3"
 };
-
+#
 firebase_app = firebase.initialize_app(firebaseConfig)
 auth = firebase_app.auth()
 
 app = FastAPI()
 api_router = APIRouter()
-# api_router.include_router(login.router, prefix="", tags=["auth-webapp"])
 
 allow_all = ['*']
 app.add_middleware(GlobalsMiddleware)
@@ -156,7 +133,6 @@ async def home(request: Request, uid: str = None):
 @app.post("/", response_class=HTMLResponse)
 async def kuchbhi(response: Response, email: str = Form(), password: str = Form(), uid: str = None, ):
     # HANDLE FOR INCORRECT LOGIN CREDENTIAL
-    # print(email, password)
     try:
         user = auth.sign_in_with_email_and_password(email, password)
         print(user)
@@ -329,6 +305,8 @@ async def register(request: Request, UID: str):
                 <h1>Registration Failed!</h1>
             </body>
             </html>
-    #         """
+             """
 
 
+if __name__ == "__main__":
+    uvicorn.run(app, port=8080)
