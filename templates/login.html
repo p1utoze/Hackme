@@ -18,12 +18,13 @@
       <h1>Login Page</h1>
     </div>
     <form action="/auth" method="post">
-      <input type="email" placeholder="Email" class="input">
-      <input type="password" placeholder="Password" class="input">
+      <input type="email" placeholder="Email" class="input" id="email">
+      <input type="password" placeholder="Password" class="input" id="password">
       <button name="login" type="submit">Sign In</button>
     </form>
+    <div class="separator"><h5>OR</h5></div>
     <div class="login_option">
-        <form action="/v1/google/login" method="get">
+        <form action="/v1/google/login" method="get" class="google">
             <button class="account" type="submit"><i class="fa-brands fa-google" style="color: #000000;"></i></button>
             </form>
       </div>
