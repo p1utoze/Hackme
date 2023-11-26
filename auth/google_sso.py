@@ -5,7 +5,7 @@ from starlette.requests import Request
 import os
 import firebase_admin
 from firebase_admin import auth as fb_auth
-from utils import GOOGLE_CLIENT_SECRET, GOOGLE_CLIENT_ID, HOST
+from auth.utils import GOOGLE_CLIENT_SECRET, GOOGLE_CLIENT_ID, HOST
 
 
 def get_google_sso() -> GoogleSSO:
