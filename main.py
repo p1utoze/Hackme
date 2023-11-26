@@ -1,67 +1,28 @@
+import uvicorn
+import time
+import firebase
+import requests
+import pandas as pd
+from typing import Annotated
+from auth import google_sso
 from fastapi import FastAPI, Depends, Request, APIRouter, Form
 from fastapi.templating import Jinja2Templates
-from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 import firebase_admin
 from pydantic import BaseModel
-from firebase_admin import credentials, firestore
+from firebase_admin import firestore
 from google.cloud.firestore_v1.base_query import FieldFilter
-# import os, typing
 from api_globals import GlobalsMiddleware, g
-import pandas as pd
 from json import loads
-import time
-from routers.login_form import LoginForm
-
-import firebase
-import requests
-# import pyrebase
-from routers.login_form import LoginForm
-from fastapi.responses import Response, RedirectResponse, JSONResponse, HTMLResponse
+from fastapi.responses import Response, RedirectResponse, HTMLResponse
+from auth.utils import db, web_auth
 
 
-
-cred = credentials.Certificate('aventusauth.json')
-firebase_admin.initialize_app(cred)
-
-db = firestore.client()
-# firebaseConfig = {
-#   "apiKey": "AIzaSyBgT68Ra8QzLU6WkSgFTX0ws2Veupng7EE",
-#   "authDomain": "test-aventus.firebaseapp.com",
-#   "projectId": "test-aventus",
-#   "storageBucket": "test-aventus.appspot.com",
-#   "messagingSenderId": "330950556473",
-#   "appId": "1:330950556473:web:03f5b5c3071c20a56546e8",
-#   "measurementId": "G-0JVRVC3R7K"
-# };
-# firebaseConfig = {
-#   "apiKey": "AIzaSyBq2PUePkbjGHpYr8LxycuUIOIri-9KjTQ",
-#   "authDomain": "aventusauth.firebaseapp.com",
-#   "projectId": "aventusauth",
-#   "storageBucket": "aventusauth.appspot.com",
-#   "messagingSenderId": "629066554537",
-#   "appId": "1:629066554537:web:3c9ab2209d641e9f1bddb8",
-#   "measurementId": "G-CBDJE2FYYZ",
-#   "databaseURL": ""
-# }
-firebaseConfig = {
-  "apiKey": "AIzaSyBq2PUePkbjGHpYr8LxycuUIOIri-9KjTQ",
-  "authDomain": "aventusauth.firebaseapp.com",
-  "databaseURL": "https://aventusauth-default-rtdb.firebaseio.com",
-  "projectId": "aventusauth",
-  "storageBucket": "aventusauth.appspot.com",
-  "messagingSenderId": "629066554537",
-  "appId": "1:629066554537:web:95d99df7082809151bddb8",
-  "measurementId": "G-FXSXEHPRSR"
-};
-
-firebase_app = firebase.initialize_app(firebaseConfig)
-auth = firebase_app.auth()
-
-app = FastAPI()
-api_router = APIRouter()
-# api_router.include_router(login.router, prefix="", tags=["auth-webapp"])
+app = FastAPI(
+    title="Hackme API",
+    version="1.0.0"
+)
 
 allow_all = ['*']
 app.add_middleware(GlobalsMiddleware)
@@ -72,7 +33,10 @@ app.add_middleware(
    allow_methods=allow_all,
    allow_headers=allow_all
 )
+
 app.mount("/static", StaticFiles(directory="static"), name="static")
+app.include_router(google_sso.router)
+
 templates = Jinja2Templates(directory="templates")
 
 class LoginCredentials(BaseModel):
@@ -107,12 +71,6 @@ def check_participant(uid=None, is_admin=None):
             return 600
         print("NOT REGISTERED. REDIRECTING TO REGISTRATION...")
         return 601
-            # return status, {'UID': uid}
-
-                # return templates.TemplateResponse(
-                # 'checkin_out.html', {'request': request, 'UID': uid, 'password': "aventus@6969", "status": status})
-            # return templates.TemplateResponse(
-            #                 'checkin_out.html', {'request': request, 'UID': uid, 'password': "aventus@6969", "status": status})
 
         details = g.df.loc[g.df['UID'] == uid].to_json(orient='records')
         doc = loads(details[1:-1])
@@ -143,29 +101,15 @@ async def home(request: Request, uid: str = None):
     return templates.TemplateResponse("login.html", {"request": request})
 
 
-# @app.post("/")
-# async def kuchbhi(response: LoginCredentials, uid: str = None):
-#     # HANDLE FOR INCORRECT LOGIN CREDENTIAL
-#     user = auth.sign_in_with_email_and_password(response.email, response.password)
-#     print(user)
-#     responsess = JSONResponse(content={})
-#     responsess.set_cookie(key="firebase_token", value=user['idToken'], secure=True, httponly=True, samesite='none')
-#     # output = check_participant(uid=uid)
-#     return {'output': 'helloworld'}
-
-@app.post("/", response_class=HTMLResponse)
-async def kuchbhi(response: Response, email: str = Form(), password: str = Form(), uid: str = None, ):
+@app.post("/auth", response_class=HTMLResponse)
+async def email_login(response: Response, email: str = Form(), password: str = Form()):
     # HANDLE FOR INCORRECT LOGIN CREDENTIAL
-    # print(email, password)
     try:
-        user = auth.sign_in_with_email_and_password(email, password)
+        user = web_auth.sign_in_with_email_and_password(email, password)
         print(user)
         # response = JSONResponse(content={})
         # response.status_code = 200
-        response.set_cookie(key="firebase_token", value=user['idToken'], secure=True, httponly=True, samesite='none')
-        base_url = "https://aventus-hackaventus.b4a.run/"
-        # print(response.body)
-        # return "/regis"
+        response.set_cookie(key="firebase_token", value=user['idToken'], httponly=True, samesite='none')
         return f"""
             <html>
             <head>
@@ -213,7 +157,7 @@ async def scan_route(request: Request):
 @app.get("/qr_scan/", dependencies=[Depends(load_data)], response_class=HTMLResponse)
 async def add_entry(request: Request, uid: str):
     if not request.cookies.get('firebase_token'):
-        base_url = "https://aventus-hackaventus.b4a.run/"
+        base_url = "http://0.0.0.0:8000"
         return templates.TemplateResponse('login.html', {"request": request, "redirect": True, "base_url": base_url})
     member_status_code = check_participant(uid)
     if member_status_code == 600:
@@ -329,6 +273,8 @@ async def register(request: Request, UID: str):
                 <h1>Registration Failed!</h1>
             </body>
             </html>
-    #         """
+             """
 
 
+if __name__ == "__main__":
+    uvicorn.run(app, port=8080)
