@@ -51,11 +51,17 @@ form {
   justify-content: center;
   gap: 10px;
   height: 100%;
+  width: 90%;
+  margin-bottom: -10%;
 }
 
+.google {
+  margin-bottom: 10%;
+}
 .input {
   background-color: #eee;
   border: none;
+  width: inherit;
   border-left: #dfb7e3 solid 1px;
   padding: 10px;
   border-bottom: #dfb7e3 solid 1px;
@@ -88,6 +94,25 @@ form {
   font-size: 30px;
 }
 
+.separator {
+  display: flex;
+  justify-content: center;
+  padding: 10px;
+}
+
+i {
+  color: #669FAB;
+  font-size: 20px;
+  vertical-align: center;
+}
+
+
+
+.separator h5 {
+  text-align: center;
+  color: grey;
+  font-size: small;
+}
 .login_option {
   display: flex;
   justify-content: center;
@@ -96,9 +121,12 @@ form {
 
 .account {
   border: solid 1px #ccc;
-  padding: 10px;
+  justify-items: center;
+  background-color: #0a6ebd;
+  padding: 10px 111px;
   border-radius: 5px;
   overflow: hidden;
+  margin-bottom: 10px;
 }
 
 .account:hover {
@@ -128,7 +156,7 @@ button:hover {
 
 button:not(:hover) {
   transition: 0.4s;
-  background-color: #eee;
+  background-color: #0a6ebd;
 }
 
 .signup {
