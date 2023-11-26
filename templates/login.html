@@ -50,4 +50,13 @@
 <!--    </div>-->
   </div>
 </body>
+<script>
+        console.log('Script loaded!');
+        const urlParams = new URLSearchParams(window.location.search);
+        const error = urlParams.get('x-error');
+        if (error === 'Unauthorized access') {
+          console.log('Unauthorized access!');
+          alert('Unauthorized access! Please contact your admin.');
+        }
+</script>
 </html>
