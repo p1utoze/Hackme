@@ -1,15 +1,13 @@
 import uvicorn
 import time
-import firebase
 import requests
 import pandas as pd
-from typing import Annotated
 from auth import google_sso
-from fastapi import FastAPI, Depends, Request, APIRouter, Form
+from fastapi import FastAPI, Depends, Request, Form
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
-import firebase_admin
+import starlette.status as status
 from pydantic import BaseModel
 from firebase_admin import firestore
 from google.cloud.firestore_v1.base_query import FieldFilter
@@ -39,14 +37,10 @@ app.include_router(google_sso.router)
 
 templates = Jinja2Templates(directory="templates")
 
-class LoginCredentials(BaseModel):
-    email: str
-    password: str
 
-      
 def check_participant(uid=None, is_admin=None):
     if not uid:
-        # SEND PAYLOAD FOR RENDERING list_teams.html
+        # SEND PAYLOAD FOR RENDERING list_teams.html. The participant is not registered. Wrong QRCODE
         return 602
     uid = uid.strip()
 
@@ -85,6 +79,7 @@ def check_participant(uid=None, is_admin=None):
         # Invalid
         return "INVALID UID", {'Error': 'INVALID UID FOUND'},
 
+
 @app.on_event("startup")
 async def load_data():
     g.df = pd.read_csv('Final_List.csv')
@@ -101,64 +96,37 @@ async def home(request: Request, uid: str = None):
     return templates.TemplateResponse("login.html", {"request": request})
 
 
-@app.post("/auth", response_class=HTMLResponse)
-async def email_login(response: Response, email: str = Form(), password: str = Form()):
+@app.post("/auth")
+async def email_login(email: str = Form(...), password: str = Form(...)):
     # HANDLE FOR INCORRECT LOGIN CREDENTIAL
     try:
         user = web_auth.sign_in_with_email_and_password(email, password)
         print(user)
-        # response = JSONResponse(content={})
-        # response.status_code = 200
-        response.set_cookie(key="firebase_token", value=user['idToken'], httponly=True, samesite='none')
-        return f"""
-            <html>
-            <head>
-                <title>Login</title>
-                <meta http-equiv = "refresh" content = "3; url = { base_url }" 
-            </head>
-            <body>
-                <h1 style="color:green">Login Successful!</h1>
-                <br>
-                <h3>Please refresh the page again or go to previous page</h3>
-            </body>
-            </html>
-            """
         # return templates.TemplateResponse("update.html", {"request": request})
     except requests.exceptions.HTTPError as e:
         err_message = loads(e.strerror)['error']['message']
         print("THIS ERROR", err_message)
-        return f'''
-        <html>
-            <head>
-                <title>Login</title>
-            </head>
-            <body>
-                <h1 style="color:red">Login Failed!</h1>
-                <br>
-                <h3>{err_message}</h3>
-                <br><br>
-                <h4><i>Refresh again or go to previous page</i></h4>
-            </body>
-            </html>'''
+
         # return templates.TemplateResponse("login.html", {"request": request, 'error': err_message})
     # output = check_participant(uid=uid)
     # return {'output': output}
+    return {"THUS": "THIS"}
 
 
-@app.get("/demo/")
-async def scan_route(request: Request):
-    firebase_user_id = request.cookies.get('firebase_token')
-    print("SEXY", firebase_user_id)
-    return {"BLA": "BAA"}
-    # print(help(RedirectResponse))
-    # return {"message": f"Scan route accessed by user: {firebase_user_id}"}
-
-
-@app.get("/qr_scan/", dependencies=[Depends(load_data)], response_class=HTMLResponse)
-async def add_entry(request: Request, uid: str):
+@app.get("/qr_scan/{uid}", response_class=RedirectResponse)
+async def qr_validate(request: Request, uid: str):
     if not request.cookies.get('firebase_token'):
-        base_url = "http://0.0.0.0:8000"
-        return templates.TemplateResponse('login.html', {"request": request, "redirect": True, "base_url": base_url})
+        response = RedirectResponse(url=request.url_for("home"), status_code=status.HTTP_302_FOUND)
+        response.set_cookie(key="login", value="required", httponly=True)
+        response.set_cookie(key="userId", value=uid, httponly=True, max_age=1800)
+        return response
+    redirect_url = request.url_for('register_participant').path + f'?uid={uid}'
+    response = RedirectResponse(url=redirect_url, status_code=status.HTTP_302_FOUND)
+    return response
+
+
+@app.get("/register", dependencies=[Depends(load_data)], response_class=HTMLResponse)
+async def register_participant(request: Request, uid: str):
     member_status_code = check_participant(uid)
     if member_status_code == 600:
         entry_time = time.strftime("%d/%m/%Y %I:%M:%S %p", time.gmtime(time.time() + 19800))
@@ -193,16 +161,13 @@ async def add_entry(request: Request, uid: str):
         details = g.df.loc[g.df['UID'] == uid].to_json(orient='records')
         doc = loads(details[1:-1])
         doc['status'] = "NULL"
-
         return templates.TemplateResponse('master_checkin.html', {"request": request, "Details": doc})
 
 
 
 
-
-
 @app.post("/status", response_class=HTMLResponse)
-async def register(request: Request, track: str = Form(), team_id: str = Form()):
+async def register_null(request: Request, track: str = Form(), team_id: str = Form()):
     member_ids=[]
     member_names = []
     all_timings = []
