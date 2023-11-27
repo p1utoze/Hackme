@@ -3,18 +3,19 @@ import time
 import requests
 import pandas as pd
 from auth import google_sso
+from admin import dashboard
 from fastapi import FastAPI, Depends, Request, Form
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 import starlette.status as status
 from pydantic import BaseModel
-from firebase_admin import firestore
 from google.cloud.firestore_v1.base_query import FieldFilter
 from api_globals import GlobalsMiddleware, g
 from json import loads
 from fastapi.responses import Response, RedirectResponse, HTMLResponse
 from auth.utils import db, web_auth
+from participants.register import fetch_user_status
 
 
 app = FastAPI(
@@ -34,6 +35,7 @@ app.add_middleware(
 
 app.mount("/static", StaticFiles(directory="static"), name="static")
 app.include_router(google_sso.router)
+app.include_router(dashboard.router)
 
 templates = Jinja2Templates(directory="templates")
 
@@ -88,21 +90,23 @@ async def load_data():
 async def home(request: Request, uid: str = None):
     firebase_user_id = request.cookies.get('firebase_token')
     if firebase_user_id:
-        return templates.TemplateResponse("update.html", {"request": request})
-        # return {"THUS": "THIS"}
-    # out = check_participant(uid)
-    # output = check_participant(uid=uid)
-    # return {"OUTPUT": "Bruh", "UID": uid}
+        return templates.TemplateResponse("dashboard.html", {"request": request})
+
     return templates.TemplateResponse("login.html", {"request": request})
 
 
-@app.post("/auth")
-async def email_login(email: str = Form(...), password: str = Form(...)):
+@app.post("/auth", response_class=RedirectResponse)
+async def email_login(request: Request, email: str = Form(...), password: str = Form(...)):
     # HANDLE FOR INCORRECT LOGIN CREDENTIAL
     try:
         user = web_auth.sign_in_with_email_and_password(email, password)
-        print(user)
-        # return templates.TemplateResponse("update.html", {"request": request})
+        if request.cookies.get("login") == "required_by_team":
+            redirect_url = request.url_for('register_participant').path + f'?uid={request.cookies.get("userId")}'
+            response = RedirectResponse(url=redirect_url, status_code=status.HTTP_302_FOUND)
+        else:
+            response = RedirectResponse(url=request.url_for("home"), status_code=status.HTTP_302_FOUND)
+        response.set_cookie(key="firebase_token", value=user['idToken'], httponly=True)
+        return response
     except requests.exceptions.HTTPError as e:
         err_message = loads(e.strerror)['error']['message']
         print("THIS ERROR", err_message)
@@ -117,7 +121,7 @@ async def email_login(email: str = Form(...), password: str = Form(...)):
 async def qr_validate(request: Request, uid: str):
     if not request.cookies.get('firebase_token'):
         response = RedirectResponse(url=request.url_for("home"), status_code=status.HTTP_302_FOUND)
-        response.set_cookie(key="login", value="required", httponly=True)
+        response.set_cookie(key="login", value="required_by_team", httponly=True)
         response.set_cookie(key="userId", value=uid, httponly=True, max_age=1800)
         return response
     redirect_url = request.url_for('register_participant').path + f'?uid={uid}'
@@ -131,32 +135,10 @@ async def register_participant(request: Request, uid: str):
     if member_status_code == 600:
         entry_time = time.strftime("%d/%m/%Y %I:%M:%S %p", time.gmtime(time.time() + 19800))
         participants = "participants"
-        cursor = db.collection(participants)
-        query = cursor.where(filter=FieldFilter("UID", "==", uid)).get()
-        data = query[0].to_dict()
-        status_val = None
-        try:
-            if data['status'] == "NULL":
-                print("Added status entry: IN")
-                cursor.document(uid).update({'status': "IN"})
-                cursor.document(uid).update({'checkin': firestore.ArrayUnion([entry_time])})
-            elif data['status'] == "IN":
-                print("Added status entry: OUT")
-                cursor.document(uid).update({'status': "OUT"})
-                cursor.document(uid).update({'checkout': firestore.ArrayUnion([entry_time])})
-            elif data['status'] == 'OUT':
-                print("Added status entry: IN")
-                cursor.document(uid).update({'status': "IN"})
-                cursor.document(uid).update({'checkin': firestore.ArrayUnion([entry_time])})
-        except:
-            print("wrong status")
-        finally:
-            # payload = {'request': Request, "details": data, "status_value": status_val, "status": "CHECKED"}
-            return templates.TemplateResponse("status_result.html",
-                                              {"request": request,
-                                               "status": data['status'],
-                                               "fname": data['firstName'],
-                                               "lname": data['lastName']})
+        status_data = fetch_user_status(uid, participants, entry_time)
+        return templates.TemplateResponse("update_status.html",
+                                              {"request": request, "Details": status_data})
+
     elif member_status_code == 601:
         details = g.df.loc[g.df['UID'] == uid].to_json(orient='records')
         doc = loads(details[1:-1])
@@ -206,10 +188,6 @@ async def register_null(request: Request, track: str = Form(), team_id: str = Fo
         print("No data found")
 
 
-class UserRegister(BaseModel):
-    UID: str
-
-
 @app.post("/register/{UID}", dependencies=[Depends(load_data)], response_class=HTMLResponse)
 async def register(request: Request, UID: str):
     try:
@@ -218,27 +196,21 @@ async def register(request: Request, UID: str):
         doc = loads(details[1:-1])
         doc['status'] = "NULL"
         db.collection("participants").document(UID).set(doc)
-        return """
-            <html>
-            <head>
-                <title>REGISTRATION</title>
-            </head>
-            <body style="background-color:green">
-                <h1>Registration Completed!</h1>
-            </body>
-            </html>
-            """
-    except:
-        return """
-        <html>
-            <head>
-                <title>REGISTRATION</title>
-            </head>
-            <body style="background-color:red">
-                <h1>Registration Failed!</h1>
-            </body>
-            </html>
-             """
+        response = templates.TemplateResponse('registration_status.html',
+                                          {"request": request,
+                                           "status": "green",
+                                           "message": "Registration Successful!"})
+        if request.cookies.get("userId") == UID:
+            response.delete_cookie(key="userId")
+            response.delete_cookie(key="login")
+        return response
+
+
+    except ValueError as e:
+        return templates.TemplateResponse('registration_status.html',
+                                          {"request": request,
+                                           "status": "red",
+                                           "message": "Error in registration"})
 
 
 if __name__ == "__main__":
