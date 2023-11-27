@@ -41,7 +41,12 @@ async def auth_callback(request: Request, sso=Depends(get_google_sso)):
         valid_user = fb_auth.get_user_by_email(user.email)
         user_id_token = fb_auth.create_custom_token(valid_user.uid)
         print(valid_user)
-        response = RedirectResponse(url="/")
+        print(request.cookies.get("login"))
+        if request.cookies.get("login") == "required":
+            redirect_url = request.url_for('register_participant').path + f'?uid={request.cookies.get("userId")}'
+            response = RedirectResponse(url=redirect_url, status_code=status.HTTP_302_FOUND)
+        else:
+            response = RedirectResponse(url=request.url_for("home"), status_code=status.HTTP_302_FOUND)
         response.set_cookie(key="firebase_token", value=user_id_token.decode(), httponly=True, max_age=1800)
         return response
     except firebase_admin._auth_utils.UserNotFoundError:
