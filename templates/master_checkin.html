@@ -1,83 +1,56 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-    <!-- Fonts -->
-    <link rel="dns-prefetch" href="https://fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css?family=Raleway:300,400,600" rel="stylesheet" type="text/css">
-    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <link rel="stylesheet" href="{{ url_for('static', path='css/master_checkin.css') }}" />
-
-    <link rel="icon" href="Favicon.png">
-
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
-    <title>Master Check-In</title>
-</head>
-<body>
-
-<script src="{{ url_for('static', path='js/master_checkin.js') }}"></script>
-<main class="my-form" style="background: None;">
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-8">
-                    <div class="card">
-                        <div class="card-body">
-                          <center>
-                            <div class="container">
-                            <span style="font-variant: small-caps;font-weight: bold;font-size: larger;">Master Check-In</span>
-                            </div>
-                          </center>
-                            <form name="my-form" onsubmit="return true" method="POST" action="/register/{{ Details['UID'] }}">
-                                  <div class="form-group row">
-                                      <label for="UID" class="col-md-4 col-form-label text-md-right"> UID </label>
-                                        <div class="col-md-6">
-                                          <input type="text" id="UID" class="form-control" value= "{{Details['UID']}}" style="color:black" required>
-                                        </div>
-                                  </div>
-                                  <div class="form-group row">
-                                      <label for="UID" class="col-md-4 col-form-label text-md-right"> UID </label>
-                                        <div class="col-md-6">
-                                          <input type="text" id="" class="form-control" value= "{{Details['UID']}}" style="color:black" required>
-                                        </div>
-                                  </div>
-                                <div class="form-group row">
-                                      <label for="UID" class="col-md-4 col-form-label text-md-right"> UID </label>
-                                        <div class="col-md-6">
-                                          <input type="text" id="UID" class="form-control" value= "{{Details['UID']}}" style="color:black" required>
-                                        </div>
-                                  </div>
-                                <div class="form-group row">
-                                      <label for="UID" class="col-md-4 col-form-label text-md-right"> UID </label>
-                                        <div class="col-md-6">
-                                          <input type="text" id="UID" class="form-control" value= "{{Details['UID']}}" style="color:black" required>
-                                        </div>
-                                  </div>
-
-                                    <br/>
-                                    <div class="col-md-6 offset-md-3">
-                                      <input class="tc_box" type="checkbox"  required />
-                                      I have accepted the terms & conditions
-                                    </div>
-                                    <br/>
-                                    <div class="col-md-6 offset-md-4">
-                                        <button type="submit" id="form_submit" class="btn btn-primary">
-                                        Register
-                                        </button>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
+<html>
+    <head>
+        <title>Admin Registration - Hackathon</title>
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', path='css/master_checkin.css') }}">
+    </head>
+    <body>
+        <div class="header">
+            <h1> {{ Details.teamName }} </h1>
+            <h6> {{ Details.projectTracks }} </h6>
+        </div>
+        <form method="POST" action="/register/{{ Details.UID }}">
+            <div class="input-group">
+                <label for="teamCode">Team Code: </label>
+                <input type="text" id="teamCode" name="teamCode" value="{{ Details.teamCode }}" placeholder="Team Code">
             </div>
-
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
-</body>
+            <div class="input-group">
+                <label for="UID">UID: </label>
+                <input type="text" id="UID" name="UID" value="{{ Details.UID }}" placeholder="UID">
+            </div>
+            <div class="input-group">
+                <label for="firstName">First Name: </label>
+                <input type="text" id="firstName" name="firstName" value="{{ Details.firstName }}" placeholder="First Name">
+            </div>
+            <div class="input-group">
+                <label for="lastName">Last Name: </label>
+                <input type="text" id="lastName" name="lastName" value="{{ Details.lastName }}" placeholder="Last Name">
+            </div>
+            <div class="input-group">
+                <label for="gender">Gender: </label>
+                <input type="text" id="gender" name="gender" value="{{ Details.gender }}" placeholder="Gender">
+            </div>
+            <div class="input-group">
+                <label for="college">College: </label>
+                <input type="text" id="college" name="college" value="{{ Details.college }}" placeholder="College">
+            </div>
+            <div class="input-group">
+                <label for="phNo">Phone Number: </label>
+                <input type="number" id="phNo" name="phNo" value="{{ Details.phNo }}" placeholder="Phone Number">
+            </div>
+            <div class="input-group">
+                <label for="email">Email: </label>
+                <input type="email" id="email" name="email" value="{{ Details.email }}" placeholder="Email">
+            </div>
+            <div class="input-group">
+                <label for="teamName">Team Name: </label>
+                <input type="text" id="teamName" name="teamName" value="{{ Details.teamName }}" placeholder="Team Name">
+            </div>
+            <div class="input-group">
+                <label for="projectTracks">Project Tracks: </label>
+                <input type="text" id="projectTracks" name="projectTracks" value="{{ Details.projectTracks }}" placeholder="Project Tracks">
+            </div>
+            <input type="submit" value="Register">
+        </form>
+    </body>
 </html>
