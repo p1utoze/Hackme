@@ -14,7 +14,7 @@ from json import loads
 from fastapi.responses import RedirectResponse, HTMLResponse
 from app.admin.utils import db, web_auth
 from app.participants.register import fetch_user_status, check_participant
-
+from app.settings import data_path, static_dir, template_dir
 
 app = FastAPI(
     title="Hackme API",
@@ -31,16 +31,17 @@ app.add_middleware(
    allow_headers=allow_all
 )
 
-app.mount("/static", StaticFiles(directory="static"), name="static")
+app.mount("/static", StaticFiles(directory=static_dir), name="static")
 app.include_router(google_sso.router)
 app.include_router(dashboard.router)
 
-templates = Jinja2Templates(directory="templates")
+templates = Jinja2Templates(directory=template_dir)
 
 
 @app.on_event("startup")
 async def load_data():
-    g.df = pd.read_csv('data/Final_List.csv')
+    g.df = pd.read_csv(data_path)
+
 
 @app.get("/", response_class=HTMLResponse)
 async def home(request: Request, uid: str = None):
