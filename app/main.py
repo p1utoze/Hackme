@@ -2,18 +2,18 @@ import uvicorn
 import time
 import requests
 import pandas as pd
-from auth import google_sso
-from admin import dashboard
+from app.auth import google_sso
+from app.admin import dashboard
 from fastapi import FastAPI, Depends, Request, Form
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 import starlette.status as status
-from api_globals import GlobalsMiddleware, g
+from app.api_globals import GlobalsMiddleware, g
 from json import loads
 from fastapi.responses import RedirectResponse, HTMLResponse
-from admin.utils import db, web_auth
-from participants.register import fetch_user_status, check_participant
+from app.admin.utils import db, web_auth
+from app.participants.register import fetch_user_status, check_participant
 
 
 app = FastAPI(
@@ -40,7 +40,7 @@ templates = Jinja2Templates(directory="templates")
 
 @app.on_event("startup")
 async def load_data():
-    g.df = pd.read_csv('Final_List.csv')
+    g.df = pd.read_csv('data/Final_List.csv')
 
 @app.get("/", response_class=HTMLResponse)
 async def home(request: Request, uid: str = None):
@@ -112,7 +112,7 @@ async def register_participant(request: Request, uid: str):
 @app.post("/register/{UID}", dependencies=[Depends(load_data)], response_class=HTMLResponse)
 async def register(request: Request, UID: str):
     try:
-        print("RESPOND SUCCESS ", g.df.shape)
+        # print("RESPOND SUCCESS ", g.df.shape)
         details = g.df.loc[g.df['UID'] == UID].to_json(orient='records')
         doc = loads(details[1:-1])
         doc['status'] = "NULL"

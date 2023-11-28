@@ -5,7 +5,7 @@ from starlette.requests import Request
 import os
 import firebase_admin
 from firebase_admin import auth as fb_auth
-from admin.utils import GOOGLE_CLIENT_SECRET, GOOGLE_CLIENT_ID, HOST
+from app.admin.utils import GOOGLE_CLIENT_SECRET, GOOGLE_CLIENT_ID, HOST
 
 
 os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'  # Only for development
