@@ -4,7 +4,7 @@ from fastapi.templating import Jinja2Templates
 import starlette.status as status
 from google.cloud.firestore_v1.base_query import FieldFilter
 from fastapi.responses import RedirectResponse, HTMLResponse
-from admin.utils import db
+from app.admin.utils import db
 from .dependencies import get_templates
 
 

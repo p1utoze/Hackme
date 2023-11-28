@@ -1,9 +1,9 @@
 from firebase_admin import firestore
 from fastapi import Request, APIRouter
 from fastapi.responses import HTMLResponse
-from api_globals import g
+from app.api_globals import g
 from fastapi.templating import Jinja2Templates
-from admin.utils import db
+from app.admin.utils import db
 from google.cloud.firestore_v1.base_query import FieldFilter
 
 router = APIRouter(prefix="/v1/teams")
@@ -26,10 +26,10 @@ def check_participant(uid=None, is_admin=None):
 
         try:
             data = query[0].to_dict()
-            print(f'{query[0].id} => {data}')
+            # print(f'{query[0].id} => {data}')
         except IndexError:
             data = {}
-            print("No data found")
+            # print("No data found")
 
         # Check if uid in firestore
         if data:
@@ -50,19 +50,19 @@ def fetch_user_status(uid, participants, entry_time):
     status_val, status_color = None, None
     try:
         if data['status'] == "NULL":
-            print("Added status entry: IN")
+            # print("Added status entry: IN")
             status_val = "IN"
             status_color = "#404040"
             cursor.document(uid).update({'status': status_val})
             cursor.document(uid).update({'checkin': firestore.ArrayUnion([entry_time])})
         elif data['status'] == "IN":
-            print("Added status entry: OUT")
+            # print("Added status entry: OUT")
             status_val = "OUT"
             status_color = "#a60000"
             cursor.document(uid).update({'status': status_val})
             cursor.document(uid).update({'checkout': firestore.ArrayUnion([entry_time])})
         elif data['status'] == 'OUT':
-            print("Added status entry: IN")
+            # print("Added status entry: IN")
             status_val = "IN"
             status_color = "#1b9c00"
             cursor.document(uid).update({'status': status_val})
