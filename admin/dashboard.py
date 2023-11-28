@@ -26,7 +26,7 @@ async def admin_dashboard(request: Request, templates: Jinja2Templates = Depends
 
 @router.post("/dashboard", response_class=HTMLResponse)
 async def dashboard_details(request: Request, templates: Jinja2Templates = Depends(get_templates), track: str = Form(...), team_id: str = Form(...)):
-    member_ids= []
+    member_ids = []
     member_names = []
     all_timings = []
     status_list = []
@@ -51,10 +51,12 @@ async def dashboard_details(request: Request, templates: Jinja2Templates = Depen
         payload = {
             'request': request,
             'team_name': team_name,
-            'member_ids': member_ids,
-            'member_names': member_names,
-            'all_timings': all_timings,
-            'status_list': status_list
+            'team_details': zip(
+                member_ids,
+                member_names,
+                status_list,
+                all_timings
+            )
         }
         return templates.TemplateResponse('dashboard.html', payload)
 
