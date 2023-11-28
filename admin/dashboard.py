@@ -15,7 +15,7 @@ from fastapi.responses import Response, RedirectResponse, HTMLResponse
 from auth.utils import db, web_auth
 from .dependencies import get_templates
 
-templates_ = Jinja2Templates(directory="../templates")
+
 router = APIRouter(prefix="/admin")
 
 
