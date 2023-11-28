@@ -1,18 +1,14 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, status
 from fastapi.responses import RedirectResponse
 from fastapi_sso.sso.google import GoogleSSO
 from starlette.requests import Request
 import os
 import firebase_admin
 from firebase_admin import auth as fb_auth
-from auth.utils import GOOGLE_CLIENT_SECRET, GOOGLE_CLIENT_ID, HOST
+from admin.utils import GOOGLE_CLIENT_SECRET, GOOGLE_CLIENT_ID, HOST
 
 
-def get_google_sso() -> GoogleSSO:
-    return GoogleSSO(GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, f"{HOST}/v1/google/callback")
-
-
-os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1' # Only for development
+os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'  # Only for development
 
 
 def get_google_sso() -> GoogleSSO:

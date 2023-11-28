@@ -1,18 +1,10 @@
 # Desc: Admin dashboard routes
-import requests
-import pandas as pd
-from fastapi import FastAPI, Depends, Request, Form, APIRouter
+from fastapi import Depends, Request, Form, APIRouter
 from fastapi.templating import Jinja2Templates
-from fastapi.staticfiles import StaticFiles
-from fastapi.middleware.cors import CORSMiddleware
 import starlette.status as status
-from pydantic import BaseModel
-from firebase_admin import firestore
 from google.cloud.firestore_v1.base_query import FieldFilter
-from api_globals import GlobalsMiddleware, g
-from json import loads
-from fastapi.responses import Response, RedirectResponse, HTMLResponse
-from auth.utils import db, web_auth
+from fastapi.responses import RedirectResponse, HTMLResponse
+from admin.utils import db
 from .dependencies import get_templates
 
 
@@ -24,7 +16,7 @@ async def admin_dashboard(request: Request, templates: Jinja2Templates = Depends
     return templates.TemplateResponse("dashboard.html", {"request": request})
 
 
-@router.post("/dashboard", response_class=HTMLResponse)
+@router.post("/dashboard", response_class=HTMLResponse, tags=['Admin'])
 async def dashboard_details(request: Request, templates: Jinja2Templates = Depends(get_templates), track: str = Form(...), team_id: str = Form(...)):
     member_ids = []
     member_names = []

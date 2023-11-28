@@ -1,9 +1,9 @@
 from firebase_admin import firestore
 from fastapi import Request, APIRouter
 from fastapi.responses import HTMLResponse
-from api_globals import g, GlobalsMiddleware
+from api_globals import g
 from fastapi.templating import Jinja2Templates
-from auth.utils import db
+from admin.utils import db
 from google.cloud.firestore_v1.base_query import FieldFilter
 
 router = APIRouter(prefix="/v1/teams")

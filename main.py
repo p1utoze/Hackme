@@ -12,7 +12,7 @@ import starlette.status as status
 from api_globals import GlobalsMiddleware, g
 from json import loads
 from fastapi.responses import RedirectResponse, HTMLResponse
-from auth.utils import db, web_auth
+from admin.utils import db, web_auth
 from participants.register import fetch_user_status, check_participant
 
 
@@ -72,7 +72,7 @@ async def email_login(request: Request, email: str = Form(...), password: str = 
 @app.get("/qr_scan/{uid}", response_class=RedirectResponse)
 async def qr_validate(request: Request, uid: str):
     if not request.cookies.get('firebase_token'):
-        response = RedirectResponse(url=request.url_for("home"), status_code=status.HTTP_302_FOUND)
+        response = RedirectResponse(url=request.url_for("home"))
         response.set_cookie(key="login", value="required_by_team", httponly=True)
         response.set_cookie(key="userId", value=uid, httponly=True, max_age=1800)
         return response
@@ -88,8 +88,13 @@ async def register_participant(request: Request, uid: str):
         entry_time = time.strftime("%d/%m/%Y %I:%M:%S %p", time.gmtime(time.time() + 19800))
         participants = "participants"
         status_data = fetch_user_status(uid, participants, entry_time)
-        return templates.TemplateResponse("update_status.html",
+        response = templates.TemplateResponse("update_status.html",
                                               {"request": request, "Details": status_data})
+        if request.cookies.get("userId") == uid:
+            response.delete_cookie(key="userId")
+            response.delete_cookie(key="login")
+
+        return response
 
     elif member_status_code == 601:
         details = g.df.loc[g.df['UID'] == uid].to_json(orient='records')
