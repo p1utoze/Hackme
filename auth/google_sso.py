@@ -42,7 +42,7 @@ async def auth_callback(request: Request, sso=Depends(get_google_sso)):
         user_id_token = fb_auth.create_custom_token(valid_user.uid)
         print(valid_user)
         print(request.cookies.get("login"))
-        if request.cookies.get("login") == "required":
+        if request.cookies.get("login") == "required_by_team":
             redirect_url = request.url_for('register_participant').path + f'?uid={request.cookies.get("userId")}'
             response = RedirectResponse(url=redirect_url, status_code=status.HTTP_302_FOUND)
         else:

@@ -3,15 +3,21 @@ import qrcode
 import os
 # from qrcode.main import s
 import pandas as pd
-
+from dotenv import load_dotenv
 df = pd.read_csv("Final_List.csv")
+load_dotenv()
 
-def generate_qr(uid, fname):
+host_url = 'http://127.0.0.1:5000'
+if os.environ['HOSTNAME_URI']:
+    host_url = os.environ['HOSTNAME_URI']
+
+
+def generate_qr(uid, fname, host_url="http://127.0.0.1:5000"):
     name = fname.split()
     fname = name[0]
     q = qrcode.QRCode(version=4, error_correction=qrcode.constants.ERROR_CORRECT_H,
                               box_size=3, border=5)
-    q.add_data(f"https://aventus-participant-manager.onrender.com/scan_barcode/{uid}")
+    q.add_data(f"{host_url}/qr_scan/{uid}")
     q.make(fit=True)
     img = q.make_image(fill_color="black", back_color="white").convert('RGB')
     logo = Image.open("../../Pictures/juice wrld/DoggoWRLD.jpeg")
@@ -27,11 +33,11 @@ def generate_qr(uid, fname):
     draw.text((qr_width - (qr_width * 0.875), qr_height - (qr_height * 0.10)), "{0}  {1}".format(uid, fname), font=font,
               fill=(0, 0, 0, 1))
     print(f"{uid}")
-    img.save(f"qrcodes_avirup/{uid}.png")
+    img.save(f"qrcodes/{uid}.png")
 
 
 for uid, fname in zip(df["UID"].to_list(), df["firstName"].to_list()):
-    generate_qr(uid, fname)
+    generate_qr(uid, fname, host_url)
 # center_size = int(qr_width * 0.25)  # Adjust the percentage as needed
 # logo = logo.resize((center_size, center_size))
 

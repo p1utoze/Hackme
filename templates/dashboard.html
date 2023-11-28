@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" >
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', path='css/dashboard.css') }}">
+    <title>Document</title>
+</head>
+<body>
+        <div class="header">
+            <h2>Admin Dashboard</h2>
+            <form method="POST" action="/admin/logout">
+                <input type="submit" value="Logout">
+            </form>
+        </div>
+        <div class="container">
+            <form method="post" action="/admin/dashboard">
+                <div class="input-group">
+                    <label for="team_id">Team ID</label>
+                    <input type="text" id="team_id" name="team_id" placeholder="Ex. AIMLXX" required>
+                </div>
+                <div class="input-group">
+                    <label for="track">Track</label>
+                    <select id="track" name="track">
+                        <option value="AIML">AIML</option>
+                        <option value="IOT">IOT</option>
+                        <option value="Web3">Web3</option>
+                        <option value="Open Innovation">Open Innovation</option>
+                    </select>
+                </div>
+                <input type="submit" value="Fetch">
+            </form>
+            {% if team_name %}
+            <div class="team-details">
+                <h3>Team Name: {{ team_name }}</h3>
+                {% for id, name, status, timings in team_details %}
+                <div class="member-details">
+                    <details>
+                        <summary><h4>{{ name }} ({{ id }})</h4></summary>
+                        <p>Status: {{ status }}</p>
+                        <ul>
+                            {% for in_time in timings.IN %}
+                            <li>IN: {{ in_time }}</li>
+                            {% endfor %}
+                            {% for out_time in timings.OUT %}
+                            <li>OUT: {{ out_time }}</li>
+                            {% endfor %}
+                        </ul>
+                    </details>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+    </body>
+</html>
