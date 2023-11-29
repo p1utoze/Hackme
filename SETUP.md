@@ -3,7 +3,7 @@ This section is for the setting the environment variables used by the applicatio
 
 
 ---
-### Environment Variables
+## Environment Variables
 
 - **SESSION_COOKIE_NAME:** Name of the cookie used to store the session id.
 <br>
@@ -46,7 +46,9 @@ This section is for the setting the environment variables used by the applicatio
   2. copy the config object from the firebaseConfig variable in the firebase initialization script. 
   3. Paste it in the FIREBASE_CONFIG variable
 
-### Setting up Organizing Team Database
+--- 
+
+## Setting up Organizing Team Database
 
 - Go to your firebase project
 - Go to Authentication
