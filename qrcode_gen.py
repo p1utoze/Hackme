@@ -4,12 +4,12 @@ import os
 # from qrcode.main import s
 import pandas as pd
 from dotenv import load_dotenv
-df = pd.read_csv("Final_List.csv")
+df = pd.read_csv("app/data/Final_List.csv")
 load_dotenv()
 
 host_url = 'http://127.0.0.1:5000'
-if os.environ['HOSTNAME_URI']:
-    host_url = os.environ['HOSTNAME_URI']
+if os.environ['HOSTNAME_URL']:
+    host_url = os.environ['HOSTNAME_URL']
 
 
 def generate_qr(uid, fname, host_url="http://127.0.0.1:5000"):
@@ -25,7 +25,7 @@ def generate_qr(uid, fname, host_url="http://127.0.0.1:5000"):
     qr_width, qr_height = img.size
     font_path = os.path.abspath(
         os.path.join(
-            os.path.dirname(__file__), 'static/Michroma/Michroma-Regular.ttf'
+            os.path.dirname(__file__), 'app/static/Michroma/Michroma-Regular.ttf'
         )
     )
     font = ImageFont.truetype(font=font_path, size=9)
