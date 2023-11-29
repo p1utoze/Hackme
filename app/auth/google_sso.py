@@ -5,7 +5,7 @@ from starlette.requests import Request
 import os
 import firebase_admin
 from firebase_admin import auth as fb_auth
-from app.admin.utils import GOOGLE_CLIENT_SECRET, GOOGLE_CLIENT_ID, HOST
+from app.admin.utils import GOOGLE_CLIENT_SECRET, GOOGLE_CLIENT_ID, HOST, COOKIE_NAME
 
 
 os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'  # Only for development
@@ -32,7 +32,6 @@ async def auth_init(sso=Depends(get_google_sso)):
 async def auth_callback(request: Request, sso=Depends(get_google_sso)):
     """Verify login"""
     user = await sso.verify_and_process(request)
-    print(user)
     try:
         valid_user = fb_auth.get_user_by_email(user.email)
         user_id_token = fb_auth.create_custom_token(valid_user.uid)
@@ -43,8 +42,9 @@ async def auth_callback(request: Request, sso=Depends(get_google_sso)):
             response = RedirectResponse(url=redirect_url, status_code=status.HTTP_302_FOUND)
         else:
             response = RedirectResponse(url=request.url_for("home"), status_code=status.HTTP_302_FOUND)
-        response.set_cookie(key="firebase_token", value=user_id_token.decode(), httponly=True, max_age=1800)
+        response.set_cookie(key=COOKIE_NAME, value=user_id_token.decode(), httponly=True, max_age=1800)
         return response
+
     except firebase_admin._auth_utils.UserNotFoundError:
         redirect_url = request.url_for('root') + '?x-error=Unauthorized+access'
         return RedirectResponse(redirect_url, status_code=status.HTTP_302_FOUND,

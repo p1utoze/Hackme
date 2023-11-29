@@ -4,7 +4,7 @@ from fastapi.templating import Jinja2Templates
 import starlette.status as status
 from google.cloud.firestore_v1.base_query import FieldFilter
 from fastapi.responses import RedirectResponse, HTMLResponse
-from app.admin.utils import db
+from app.admin.utils import db, COOKIE_NAME
 from .dependencies import get_templates
 
 
@@ -60,8 +60,8 @@ async def dashboard_details(request: Request, templates: Jinja2Templates = Depen
 @router.post("/logout", tags=['Admin'], response_class=RedirectResponse)
 async def admin_logout(request: Request):
     response = RedirectResponse(url=request.url_for("home"), status_code=status.HTTP_301_MOVED_PERMANENTLY)
-    if request.cookies.get("firebase_token"):
-        response.delete_cookie(key="firebase_token")
+    if request.cookies.get(COOKIE_NAME):
+        response.delete_cookie(key=COOKIE_NAME)
     if request.cookies.get("login") == "required_by_team":
         response.delete_cookie(key="login")
     print(request.cookies.keys())
