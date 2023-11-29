@@ -8,9 +8,10 @@ load_dotenv()
 
 GOOGLE_CLIENT_ID = os.environ["GOOGLE_CLIENT_ID"]
 GOOGLE_CLIENT_SECRET = os.environ["GOOGLE_CLIENT_SECRET"]
-HOST = os.environ["HOSTNAME_URI"]
-FIREBASE_CERT = loads(os.environ["FIREBASE_SERVICE_ACC"])
+HOST = os.environ["HOSTNAME_URL"]
+FIREBASE_CERT = loads(os.environ["FIREBASE_SERVICE_ACCOUNT"])
 FIREBASE_CONFIG = loads(os.environ["FIREBASE_CONFIG"])
+COOKIE_NAME = os.environ["SESSION_COOKIE_NAME"]
 
 _cred = credentials.Certificate(FIREBASE_CERT)
 _fir_app = firebase_admin.initialize_app(_cred)

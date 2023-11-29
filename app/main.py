@@ -12,7 +12,7 @@ import starlette.status as status
 from app.api_globals import GlobalsMiddleware, g
 from json import loads
 from fastapi.responses import RedirectResponse, HTMLResponse
-from app.admin.utils import db, web_auth
+from app.admin.utils import db, web_auth, COOKIE_NAME
 from app.participants.register import fetch_user_status, check_participant
 from app.settings import data_path, static_dir, template_dir
 
@@ -45,7 +45,7 @@ async def load_data():
 
 @app.get("/", response_class=HTMLResponse)
 async def home(request: Request, uid: str = None):
-    firebase_user_id = request.cookies.get('firebase_token')
+    firebase_user_id = request.cookies.get(COOKIE_NAME)
     if firebase_user_id:
         return templates.TemplateResponse("dashboard.html", {"request": request})
 
@@ -62,7 +62,7 @@ async def email_login(request: Request, email: str = Form(...), password: str = 
             response = RedirectResponse(url=redirect_url, status_code=status.HTTP_302_FOUND)
         else:
             response = RedirectResponse(url=request.url_for("home"), status_code=status.HTTP_302_FOUND)
-        response.set_cookie(key="firebase_token", value=user['idToken'], httponly=True)
+        response.set_cookie(key=COOKIE_NAME, value=user['idToken'], httponly=True)
         return response
     except requests.exceptions.HTTPError as e:
         err_message = loads(e.strerror)['error']['message']
@@ -72,7 +72,7 @@ async def email_login(request: Request, email: str = Form(...), password: str = 
 
 @app.get("/qr_scan/{uid}", response_class=RedirectResponse)
 async def qr_validate(request: Request, uid: str):
-    if not request.cookies.get('firebase_token'):
+    if not request.cookies.get(COOKIE_NAME):
         response = RedirectResponse(url=request.url_for("home"))
         response.set_cookie(key="login", value="required_by_team", httponly=True)
         response.set_cookie(key="userId", value=uid, httponly=True, max_age=1800)

@@ -12,22 +12,31 @@ A minimalistic open-source web-application that serves as hackathon registration
 
 ## Get started
 To use this app locally, pull the docker image and run on port 5050
+
+### Prerequisites
+
+- Install project dependencies using pip
+```
+pip install -r requirements.txt
+```
+- Rename the `.env.template` to `.env` and replace the placeholders. Refer [Environment Variables configuration](SETUP.md/#environment-variables-configuration
+) for more details.
+
+- Add the users who can access the application to the firebase project. Refer [Setting up Organizing Team Database](SETUP.md/#setting-up-organizing-team-database) for more details.
+
+### Usage
+
+- **Uvicorn:** To run the app locally with uvicorn server on port `<port>`.
+```
+uvicorn app.main:app --reload --port <port>
+```
+- **Docker:** To run the app locally with docker on port `<port>`.
 ```
 $ docker pull p1utoze/hackme:v1.0
+$ docker run -p <port>:5050 --env-file .env p1utoze/hackme:v1.0
 ```
-
-## Docker-Compose
-
-Needs: Docker, Docker-Compose
-
-- `./install.sh` (Creates virtualenviroment, install requirements.txt and migrates DB)
-- `docker-compose up` (Starts server)
-
-That is all! 😃 If you need to run any python command just do as the following examples:
-
-- Install new library: `docker-compose run python -m pip install [library]`
-- Make migrations: `docker-compose run python manage.py makemigrations`
-- Migrate: `docker-compose run python manage.py migrate`
+**NOTE:**  Make sure the callback url port is same as the port specified in the command. Refer [Environment Variables configuration](SETUP.md/#environment-variables-configuration
+) for more details.
 
 ### Python
 
@@ -35,10 +44,8 @@ Needs: Python 3.X, virtualenv
 
 Stable at Python v.3.8.X and 3.10 (tested at Python 3.8.17 and 3.10)
 
-- `git clone git@github.com:HackAssistant/hackassistant.git && cd hackassistant`
-- `virtualenv env --python=python3`
-- `source ./env/bin/activate`
-- `pip install -r requirements.txt`
-- `python manage.py migrate`
-- `python manage.py createadmin` (creates admin to manage all the app: CUSTOM COMMAND!)
-- `python manage.py runserver localhost:8000` (specifies to localhost, since admin is created under that specific domain, otherwise it wont work)
+### Roadmap
+Currently, I have mentioned the features that I have planned to implement in the future in the issues. If you have any suggestions, please feel free to open an issue.
+### Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
