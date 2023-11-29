@@ -13,8 +13,7 @@ body {
   flex-direction: column;
   font-family: "Montserrat", sans-serif;
   height: 100vh;
-  background-color: #dfb7e3;
-  background: linear-gradient(to right, white, #dfb7e3);
+  background: linear-gradient(to bottom, #000000, #112300);
 }
 
 #container {
@@ -30,19 +29,6 @@ body {
   overflow: hidden;
 }
 
-#container2 {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.35);
-  border-radius: 15px;
-  min-height: 280px;
-  min-width: 300px;
-  background-color: white;
-  overflow: hidden;
-  display: none;
-}
 
 form {
   display: flex;
@@ -68,8 +54,7 @@ form {
 }
 
 .top {
-  background-color: #c4d3ec;
-  background: linear-gradient(to left, #dfb7e3, #b5c7e7);
+  background: linear-gradient(to bottom, #000000, #02a100);
   display: flex;
   align-items: center;
   justify-content: center;
