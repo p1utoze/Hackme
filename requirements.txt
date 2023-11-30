@@ -9,7 +9,7 @@ Pillow==10.1.0
 protobuf==4.23.2
 pydantic~=1.10.12
 python-dotenv~=1.0.0
-python-multipart
+python-multipart==0.0.6
 qrcode==7.4.2
 requests~=2.31.0
 setuptools~=68.0.0
