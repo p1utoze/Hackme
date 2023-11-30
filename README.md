@@ -1,7 +1,7 @@
 <p align="center">
   <img src="https://results.pre-commit.ci/badge/github/p1utoze/Hackme/main.svg">
 </p>
-  
+
 # Hackme
 A minimalistic open-source web-application that serves as hackathon registration and participant status monitoring. Initally developed as a event management tool for [Hackaventus](https://hackaventus.com/)- A national level hackathon. It is designed to handle large amount of user registrations.
 
