@@ -41,12 +41,12 @@ This section is for the setting the environment variables used by the applicatio
   7. Copy the string and paste it in the FIREBASE_SERVICE_ACCOUNT variable
 <br>
 <br>
-- **FIREBASE_CONFIG:** 
+- **FIREBASE_CONFIG:**
   1. Create a new web app in the firebase project
-  2. copy the config object from the firebaseConfig variable in the firebase initialization script. 
+  2. copy the config object from the firebaseConfig variable in the firebase initialization script.
   3. Paste it in the FIREBASE_CONFIG variable
 
---- 
+---
 
 ## Setting up Organizing Team Database
 

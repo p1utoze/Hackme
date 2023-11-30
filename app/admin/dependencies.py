@@ -1,6 +1,7 @@
 from fastapi.templating import Jinja2Templates
 from pathlib import Path
 
+
 def get_templates():
     template_dir = Path(__file__).parent.parent / "templates"
     print(template_dir)

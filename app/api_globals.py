@@ -14,17 +14,13 @@ class Globals:
     _defaults: dict[str, Any]
 
     def __init__(self) -> None:
-        object.__setattr__(self, '_vars', {})
-        object.__setattr__(self, '_defaults', {})
+        object.__setattr__(self, "_vars", {})
+        object.__setattr__(self, "_defaults", {})
 
     def set_default(self, name: str, default: Any) -> None:
         """Set a default value for a variable."""
-
         # Ignore if default is already set and is the same value
-        if (
-            name in self._defaults
-            and default is self._defaults[name]
-        ):
+        if name in self._defaults and default is self._defaults[name]:
             return
 
         # Ensure we don't have a value set already - the default will have
@@ -79,9 +75,11 @@ async def globals_middleware_dispatch(
 
 
 class GlobalsMiddleware(BaseHTTPMiddleware):  # noqa
-    """Middleware to setup the globals context using globals_middleware_dispatch()."""
+    """Middleware to setup the globals context using
+    globals_middleware_dispatch()."""
 
     def __init__(self, app: ASGIApp) -> None:
         super().__init__(app, globals_middleware_dispatch)
+
 
 g = Globals()

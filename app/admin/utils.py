@@ -4,6 +4,7 @@ import firebase
 from dotenv import load_dotenv
 from json import loads
 from firebase_admin import credentials, firestore
+
 load_dotenv()
 
 GOOGLE_CLIENT_ID = os.environ["GOOGLE_CLIENT_ID"]

@@ -18,5 +18,3 @@ EXPOSE 5050
 
 # command to run on container start
 CMD ["gunicorn", "app.main:app", "-w", "2", "-k", "uvicorn.workers.UvicornWorker", "--bind", "0.0.0.0:5050", "--forwarded-allow-ips='*'"]
-
-
