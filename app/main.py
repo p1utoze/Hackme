@@ -59,9 +59,10 @@ async def email_login(
     try:
         user = web_auth.sign_in_with_email_and_password(email, password)
         if request.cookies.get("login") == "required_by_team":
-            redirect_url = request.url_for(
-                "register_participant"
-            ).path + f'?uid={request.cookies.get("userId")}'
+            redirect_url = (
+                request.url_for("register_participant").path
+                + f'?uid={request.cookies.get("userId")}'
+            )
             response = RedirectResponse(
                 url=redirect_url, status_code=status.HTTP_302_FOUND
             )
