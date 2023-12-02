@@ -2,26 +2,23 @@ from fastapi import APIRouter, Depends, status
 from fastapi.responses import RedirectResponse
 from fastapi_sso.sso.google import GoogleSSO
 from starlette.requests import Request
-import os
 import firebase_admin
 from firebase_admin import auth as fb_auth
 from app.admin.utils import (
     GOOGLE_CLIENT_SECRET,
     GOOGLE_CLIENT_ID,
-    HOST,
     COOKIE_NAME,
 )
 
 
-os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"  # Only for development
+# os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"  # Only for development
 
 
 def get_google_sso() -> GoogleSSO:
     return GoogleSSO(
         GOOGLE_CLIENT_ID,
         GOOGLE_CLIENT_SECRET,
-        f"{HOST}/v1/google/callback",
-        allow_insecure_http=True,  # Disable this in production
+        # redirect_uri=f"{HOST}/v1/google/callback", # For development
     )
 
 
@@ -29,9 +26,11 @@ router = APIRouter(prefix="/v1/google")
 
 
 @router.get("/login", tags=["Google SSO"])
-async def auth_init(sso=Depends(get_google_sso)):
+async def auth_init(request: Request, sso=Depends(get_google_sso)):
     """Initialize auth and redirect."""
-    return await sso.get_login_redirect()
+    return await sso.get_login_redirect(
+        redirect_uri=request.url_for("auth_callback")
+    )
 
 
 @router.get("/callback", response_class=RedirectResponse, tags=["Google SSO"])
@@ -48,17 +47,12 @@ async def auth_callback(request: Request, sso=Depends(get_google_sso)):
                 request.url_for("register_participant").path
                 + f'?uid={request.cookies.get("userId")}'
             )
-            response = RedirectResponse(
-                url=redirect_url, status_code=status.HTTP_302_FOUND
-            )
+            response = RedirectResponse(url=redirect_url)
         else:
-            response = RedirectResponse(
-                url=request.url_for("home"), status_code=status.HTTP_302_FOUND
-            )
+            response = RedirectResponse(url=request.url_for("home"))
         response.set_cookie(
             key=COOKIE_NAME,
             value=user_id_token.decode(),
-            httponly=True,
             max_age=1800,
         )
         return response
