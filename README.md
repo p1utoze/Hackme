@@ -15,7 +15,7 @@ A minimalistic open-source web-application that serves as hackathon registration
 - Automatic participant status update through ID scan
 
 ## Get started
-To use this app locally, pull the docker image and run on port 5050
+To use this app, check out my hosted website: [hackme](https://hackme.cloudns.nz)
 
 ### Prerequisites
 
