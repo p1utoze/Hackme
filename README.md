@@ -36,10 +36,10 @@ uvicorn app.main:app --reload --port <port>
 ```
 - **Docker:** To run the app locally with docker on port `<port>`.
 ```
-$ docker pull p1utoze/hackme:v1.0
-$ docker run -p <port>:5050 --env-file .env p1utoze/hackme:v1.0
+$ docker pull p1utoze/hackme:v1.8
+$ docker run -p <port>:80 --env-file .env p1utoze/hackme:v1.8
 ```
-**NOTE:**  Make sure the callback url port is same as the port specified in the command. Refer [Environment Variables configuration](SETUP.md/#environment-variables-configuration
+**NOTE:** Ensure the callback url port is the same as the port specified in the command. Refer [Environment Variables configuration](SETUP.md/#environment-variables-configuration
 ) for more details.
 
 ### Python
@@ -49,7 +49,7 @@ Needs: Python 3.X, virtualenv
 Stable at Python v.3.8.X and 3.10 (tested at Python 3.8.17 and 3.10)
 
 ### Roadmap
-Currently, I have mentioned the features that I have planned to implement in the future in the issues. If you have any suggestions, please feel free to open an issue.
+I have mentioned the features I have planned to implement in the future in the issues. If you have any suggestions, please feel free to open an issue.
 ### Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
