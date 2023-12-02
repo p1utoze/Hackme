@@ -1,4 +1,4 @@
-FROM python:3.10-slim-buster
+FROM tiangolo/uvicorn-gunicorn-fastapi:python3.10-slim
 LABEL authors="p1utoze"
 
 # set the working directory in the container
@@ -14,7 +14,8 @@ RUN pip install --no-cache-dir -r /code/requirements.txt
 COPY ./app /code/app
 
 # expose port 5050
-EXPOSE 5050
+EXPOSE 80
 
-# command to run on container start
-CMD ["gunicorn", "app.main:app", "-w", "2", "-k", "uvicorn.workers.UvicornWorker", "--bind", "0.0.0.0:5050", "--forwarded-allow-ips='*'"]
+# command to run on container start: Use either gunicorn or uvicorn
+#CMD ["gunicorn", "app.main:app", "-w", "2", "-k", "uvicorn.workers.UvicornWorker", "--bind", "0.0.0.0:5050", "--forwarded-allow-ips='*'"]
+CMD ["uvicorn", "app.main:app", "--proxy-headers", "--host", "0.0.0.0", "--port", "80", "--forwarded-allow-ips='*'"]
