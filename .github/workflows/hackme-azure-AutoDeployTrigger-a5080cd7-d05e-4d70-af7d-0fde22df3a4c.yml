@@ -1,0 +1,42 @@
+name: Trigger auto deployment for hackme-azure
+
+# When this action will be executed
+on:
+  # Automatically trigger it when detected changes in repo
+  push:
+    branches: 
+      [ main ]
+    paths:
+    - '**'
+    - '.github/workflows/hackme-azure-AutoDeployTrigger-a5080cd7-d05e-4d70-af7d-0fde22df3a4c.yml'
+
+  # Allow manual trigger 
+  workflow_dispatch:
+      
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout to the branch
+        uses: actions/checkout@v2
+
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.HACKMEAZURE_AZURE_CREDENTIALS }}
+
+      - name: Build and push container image to registry
+        uses: azure/container-apps-deploy-action@v2
+        with:
+          appSourcePath: ${{ github.workspace }} 
+          registryUrl: docker.io
+          registryUsername: ${{ secrets.HACKMEAZURE_REGISTRY_USERNAME }}
+          registryPassword: ${{ secrets.HACKMEAZURE_REGISTRY_PASSWORD }}
+          containerAppName: hackme-azure
+          resourceGroup: MyProjects
+          imageToBuild: p1utoze/hackme-azure:${{ github.sha }}
+          
+
+     
+
