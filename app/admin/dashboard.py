@@ -7,6 +7,7 @@ from fastapi.responses import RedirectResponse, HTMLResponse
 from app.admin.utils import db, COOKIE_NAME
 from .dependencies import get_templates
 
+# initialize router object with prefix /admin
 router = APIRouter(prefix="/admin")
 
 
@@ -14,6 +15,18 @@ router = APIRouter(prefix="/admin")
 async def admin_dashboard(
     request: Request, templates: Jinja2Templates = Depends(get_templates)
 ):
+    """Admin dashboard route, displays all the teams and their members based on
+    the query params.
+
+    Parameters
+    ----------
+    request: Request object
+    templates: Jinja2Templates object from dependencies
+
+    Returns
+    -------
+    :return: HTMLResponse
+    """
     return templates.TemplateResponse("dashboard.html", {"request": request})
 
 
@@ -21,9 +34,23 @@ async def admin_dashboard(
 async def dashboard_details(
     request: Request,
     templates: Jinja2Templates = Depends(get_templates),
-    track: str = Form(...),
     team_id: str = Form(...),
 ):
+    """Dashboard details route, displays all the teams and their members based
+    on the query params on POST request. The payload is sent to the
+    dashboard.html template. The template renders the data in a collapsible
+    table format.
+
+    Parameters
+    ----------
+    request: Request object
+    templates: Jinja2Templates object from dependencies
+    team_id: str, team code
+
+    Returns
+    -------
+    :return: HTMLResponse
+    """
     member_ids = []
     member_names = []
     all_timings = []
@@ -68,6 +95,16 @@ async def dashboard_details(
 
 @router.post("/logout", tags=["Admin"], response_class=RedirectResponse)
 async def admin_logout(request: Request):
+    """Admin logout route, deletes the cookie and redirects to the home page.
+
+    Parameters
+    ----------
+    request: Request object
+
+    Returns
+    -------
+    :return: RedirectResponse
+    """
     response = RedirectResponse(
         url=request.url_for("home"),
         status_code=status.HTTP_301_MOVED_PERMANENTLY,

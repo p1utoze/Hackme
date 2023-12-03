@@ -15,6 +15,18 @@ from app.admin.utils import (
 
 
 def get_google_sso() -> GoogleSSO:
+    """Get GoogleSSO instance. Required for dependency injection. Parameters
+    required are GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET. The redirect_uri is
+    optional (allows dynamic redirect_uri if not provided)
+
+    Parameters
+    ----------
+    None
+
+    Returns
+    -------
+    :return: GoogleSSO instance
+    """
     return GoogleSSO(
         GOOGLE_CLIENT_ID,
         GOOGLE_CLIENT_SECRET,
@@ -22,12 +34,24 @@ def get_google_sso() -> GoogleSSO:
     )
 
 
+# initialize router object with prefix /v1/google
 router = APIRouter(prefix="/v1/google")
 
 
 @router.get("/login", tags=["Google SSO"])
 async def auth_init(request: Request, sso=Depends(get_google_sso)):
-    """Initialize auth and redirect."""
+    """Initialize auth and redirect. Pass the redirect_uri as parameter to
+    callback with any host.
+
+    Parameters
+    ----------
+    request: Request object
+    sso: GoogleSSO instance from dependencies
+
+    Returns
+    -------
+    :return: SSOBase object
+    """
     return await sso.get_login_redirect(
         redirect_uri=request.url_for("auth_callback")
     )
@@ -35,7 +59,18 @@ async def auth_init(request: Request, sso=Depends(get_google_sso)):
 
 @router.get("/callback", response_class=RedirectResponse, tags=["Google SSO"])
 async def auth_callback(request: Request, sso=Depends(get_google_sso)):
-    """Verify login."""
+    """Verify login. Redirects to home page if successful, else redirects to
+    root with registration if request is from the QR scan endpoint.
+
+    Parameters
+    ----------
+    request: Request object
+    sso: GoogleSSO instance from dependencies
+
+    Returns
+    -------
+    :return: RedirectResponse object
+    """
     user = await sso.verify_and_process(request)
     try:
         valid_user = fb_auth.get_user_by_email(user.email)
