@@ -13,6 +13,9 @@ A minimalistic open-source web-application that serves as hackathon registration
 - Supports Google SSO and Firebase Auth with email and password 🤔
 - Participant management dashboard
 - Automatic participant status update through ID scan
+- Hackme application usage flowchart:
+
+![Hackme application flowchart](./assets/Hackme.drawio.svg)
 
 ## Get started
 To use this app, check out my hosted website: [hackme](https://hackme.cloudns.nz)
