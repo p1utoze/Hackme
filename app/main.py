@@ -4,6 +4,7 @@ import requests
 import pandas as pd
 from app.auth import google_sso
 from app.admin import dashboard
+from urllib.parse import quote_plus
 from fastapi import FastAPI, Depends, Request, Form
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
@@ -12,12 +13,30 @@ import starlette.status as status
 from app.api_globals import GlobalsMiddleware, g
 from json import loads
 from fastapi.responses import RedirectResponse, HTMLResponse
-from app.admin.utils import db, web_auth, COOKIE_NAME
+from app.admin.utils import (
+    db,
+    web_auth,
+    COOKIE_NAME,
+    POSTGRES_DB,
+    POSTGRES_HOST,
+    POSTGRES_PASSWORD,
+    POSTGRES_USER,
+    FIRESTORE_COLLECTION,
+)
 from app.participants.register import fetch_user_status, check_participant
-from app.settings import data_path, static_dir, template_dir
+from app.settings import static_dir, template_dir
+from slowapi import Limiter, _rate_limit_exceeded_handler
+from slowapi.util import get_remote_address
+from slowapi.errors import RateLimitExceeded
+from sqlalchemy import create_engine
+
+limiter = Limiter(key_func=get_remote_address)
+
 
 # Initialize FastAPI app instance with title and version
 app = FastAPI(title="Hackme API", version="1.0.0")
+app.state.limiter = limiter
+app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
 # Add CORS middleware to allow all origins to make requests to this API server
 allow_all = ["*"]
@@ -51,7 +70,12 @@ async def load_data():
     :param: None    :return: None
     ----------------
     """
-    g.df = pd.read_csv(data_path)
+    __pass = quote_plus(POSTGRES_PASSWORD)
+    conn = create_engine(
+        f"postgresql://{POSTGRES_USER}:{__pass}@{POSTGRES_HOST}:5432/{POSTGRES_DB}"
+    )
+    g.df = pd.read_sql_table("participants", conn)
+    print(f"{g.df.shape[0]} number of data loaded successfully")
 
 
 @app.get("/", response_class=HTMLResponse)
@@ -167,6 +191,7 @@ async def qr_validate(request: Request, uid: str):
 @app.get(
     "/register", dependencies=[Depends(load_data)], response_class=HTMLResponse
 )
+# @limiter.limit("2/minute")
 async def register_participant(request: Request, uid: str):
     """Render the register page. This page is rendered when the user scans the
     QR code for the first time. It checks if the user is logged in or not. If
@@ -186,14 +211,15 @@ async def register_participant(request: Request, uid: str):
     :return: HTMLResponse object
     """
     member_status_code = check_participant(uid)
+    print(member_status_code)
     if (
         member_status_code == 600
     ):  # Update status page for already registered participants with timestamp
         entry_time = time.strftime(
             "%d/%m/%Y %I:%M:%S %p", time.gmtime(time.time() + 19800)
         )
-        participants = "participants"
-        status_data = fetch_user_status(uid, participants, entry_time)
+        # participants = "participants"
+        status_data = fetch_user_status(uid, FIRESTORE_COLLECTION, entry_time)
         response = templates.TemplateResponse(
             "update_status.html", {"request": request, "Details": status_data}
         )
@@ -206,7 +232,7 @@ async def register_participant(request: Request, uid: str):
     elif (
         member_status_code == 601
     ):  # Fetch details from database and render registration form
-        details = g.df.loc[g.df["UID"] == uid].to_json(orient="records")
+        details = g.df.loc[g.df["member_id"] == uid].to_json(orient="records")
         doc = loads(details[1:-1])
         doc["status"] = "NULL"
         return templates.TemplateResponse(
@@ -231,6 +257,7 @@ async def register_participant(request: Request, uid: str):
     dependencies=[Depends(load_data)],
     response_class=HTMLResponse,
 )
+@limiter.limit("2/minute")
 async def register(request: Request, UID: str):
     """Register the participant. This function is called when the user submits
     the register form on the register page. It updates the participant details
@@ -250,10 +277,10 @@ async def register(request: Request, UID: str):
     """
     try:
         # print("RESPOND SUCCESS ", g.df.shape)
-        details = g.df.loc[g.df["UID"] == UID].to_json(orient="records")
+        details = g.df.loc[g.df["member_id"] == UID].to_json(orient="records")
         doc = loads(details[1:-1])
         doc["status"] = "NULL"
-        db.collection("participants").document(UID).set(doc)
+        db.collection(FIRESTORE_COLLECTION).document(UID).set(doc)
         response = templates.TemplateResponse(
             "registration_status.html",
             {
@@ -276,6 +303,12 @@ async def register(request: Request, UID: str):
                 "message": "Error in registration",
             },
         )
+
+
+@app.get("/dummy")
+@limiter.limit("2/minute")
+async def dummy(request: Request):
+    return {"message": "Hello World"}
 
 
 if __name__ == "__main__":

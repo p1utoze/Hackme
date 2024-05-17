@@ -21,6 +21,7 @@ repos:
       - id: flake8
         exclude: ^.*__init__.py$
         stages: [commit, push, manual]
+        args: [--max-line-length=109]
 
   - repo: https://github.com/hhatto/autopep8
     rev:  v2.0.4

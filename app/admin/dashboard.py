@@ -4,7 +4,7 @@ from fastapi.templating import Jinja2Templates
 import starlette.status as status
 from google.cloud.firestore_v1.base_query import FieldFilter
 from fastapi.responses import RedirectResponse, HTMLResponse
-from app.admin.utils import db, COOKIE_NAME
+from app.admin.utils import db, COOKIE_NAME, FIRESTORE_COLLECTION
 from .dependencies import get_templates
 
 # initialize router object with prefix /admin
@@ -56,7 +56,7 @@ async def dashboard_details(
     all_timings = []
     status_list = []
     team_name = None
-    doc = db.collection("participants")
+    doc = db.collection(FIRESTORE_COLLECTION)
     query = doc.where(filter=FieldFilter("teamCode", "==", team_id)).stream()
     try:
         # print(query)
