@@ -3,7 +3,7 @@ from fastapi import Request, APIRouter
 from fastapi.responses import HTMLResponse
 from app.api_globals import g
 from fastapi.templating import Jinja2Templates
-from app.admin.utils import db
+from app.admin.utils import db, FIRESTORE_COLLECTION
 from google.cloud.firestore_v1.base_query import FieldFilter
 
 # initialize router object with prefix /v1/teams and templates object
@@ -33,10 +33,9 @@ def check_participant(uid=None, is_admin=None):
 
     print(f'"{uid}"')
     # Registered participants
-    s = uid in g.df["UID"].tolist()
+    s = uid in g.df["member_id"].tolist()
     if s:
-        participants = "participants"
-        cursor = db.collection(participants)
+        cursor = db.collection(FIRESTORE_COLLECTION)
         query = cursor.where(filter=FieldFilter("UID", "==", uid)).get()
 
         try:
@@ -134,7 +133,7 @@ async def master_checkin(request: Request):
 
     Returns
     -------
-    :return: HTMLResponse object
+    :return: HTMLResponse object`
     """
     return templates.TemplateResponse(
         "master_checkin.html", {"request": request, "teams": g.teams}

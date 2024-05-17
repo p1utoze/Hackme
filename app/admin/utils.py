@@ -24,3 +24,10 @@ db = firestore.client()
 # initialize firebase auth
 _firebase_app = firebase.initialize_app(FIREBASE_CONFIG)
 web_auth = _firebase_app.auth()
+
+POSTGRES_USER = os.environ["POSTGRES_USER"]
+POSTGRES_PASSWORD = os.environ["POSTGRES_PASSWORD"]
+POSTGRES_DB = os.environ["POSTGRES_DB"]
+POSTGRES_HOST = os.environ["POSTGRES_HOST"]
+
+FIRESTORE_COLLECTION = os.environ["FIRESTORE_COLLECTION"]
