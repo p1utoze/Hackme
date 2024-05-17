@@ -1,7 +1,10 @@
 body {
     font-family: Arial, sans-serif;
     background-color: #202020;
+/* Disables pull-to-refresh but allows overscroll glow effects. */
+  overscroll-behavior-y: contain;
     color: #ffffff;
+    
 }
 
 .header {
