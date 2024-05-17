@@ -9,25 +9,25 @@
     </head>
     <body>
         <div class="header">
-            <h1> {{ Details.teamName }} </h1>
-            <h6> {{ Details.projectTracks }} </h6>
+            <h1> {{ Details.team_name }} </h1>
+            <h6> {{ Details.track }} </h6>
         </div>
-        <form method="POST" action="/register/{{ Details.UID }}">
+        <form method="POST" action="/register/{{ Details.member_id }}">
             <div class="input-group">
                 <label for="teamCode">Team Code: </label>
-                <input type="text" id="teamCode" name="teamCode" value="{{ Details.teamCode }}" placeholder="Team Code">
+                <input type="text" id="teamCode" name="teamCode" value="{{ Details.team_id }}" placeholder="Team Code">
             </div>
             <div class="input-group">
                 <label for="UID">UID: </label>
-                <input type="text" id="UID" name="UID" value="{{ Details.UID }}" placeholder="UID">
+                <input type="text" id="UID" name="UID" value="{{ Details.member_id }}" placeholder="UID">
             </div>
             <div class="input-group">
                 <label for="firstName">First Name: </label>
-                <input type="text" id="firstName" name="firstName" value="{{ Details.firstName }}" placeholder="First Name">
+                <input type="text" id="firstName" name="firstName" value="{{ Details.f_name }}" placeholder="First Name">
             </div>
             <div class="input-group">
                 <label for="lastName">Last Name: </label>
-                <input type="text" id="lastName" name="lastName" value="{{ Details.lastName }}" placeholder="Last Name">
+                <input type="text" id="lastName" name="lastName" value="{{ Details.l_name }}" placeholder="Last Name">
             </div>
             <div class="input-group">
                 <label for="gender">Gender: </label>
@@ -38,20 +38,16 @@
                 <input type="text" id="college" name="college" value="{{ Details.college }}" placeholder="College">
             </div>
             <div class="input-group">
-                <label for="phNo">Phone Number: </label>
-                <input type="number" id="phNo" name="phNo" value="{{ Details.phNo }}" placeholder="Phone Number">
-            </div>
-            <div class="input-group">
                 <label for="email">Email: </label>
                 <input type="email" id="email" name="email" value="{{ Details.email }}" placeholder="Email">
             </div>
             <div class="input-group">
                 <label for="teamName">Team Name: </label>
-                <input type="text" id="teamName" name="teamName" value="{{ Details.teamName }}" placeholder="Team Name">
+                <input type="text" id="teamName" name="teamName" value="{{ Details.team_name }}" placeholder="Team Name">
             </div>
             <div class="input-group">
                 <label for="projectTracks">Project Tracks: </label>
-                <input type="text" id="projectTracks" name="projectTracks" value="{{ Details.projectTracks }}" placeholder="Project Tracks">
+                <input type="text" id="projectTracks" name="projectTracks" value="{{ Details.track }}" placeholder="Project Tracks">
             </div>
             <input type="submit" value="Register">
         </form>

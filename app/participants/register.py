@@ -36,7 +36,7 @@ def check_participant(uid=None, is_admin=None):
     s = uid in g.df["member_id"].tolist()
     if s:
         cursor = db.collection(FIRESTORE_COLLECTION)
-        query = cursor.where(filter=FieldFilter("UID", "==", uid)).get()
+        query = cursor.where(filter=FieldFilter("member_id", "==", uid)).get()
 
         try:
             data = query[0].to_dict()
@@ -81,7 +81,7 @@ def fetch_user_status(uid, participants, entry_time) -> dict:
 
     """
     cursor = db.collection(participants)
-    query = cursor.where(filter=FieldFilter("UID", "==", uid)).get()
+    query = cursor.where(filter=FieldFilter("member_id", "==", uid)).get()
     data = query[0].to_dict()
     status_val, status_color = None, None
     try:
@@ -115,10 +115,10 @@ def fetch_user_status(uid, participants, entry_time) -> dict:
         status_data = {
             "status": status_val,
             "color": status_color,
-            "fname": data["firstName"],
-            "lname": data["lastName"],
-            "team": data["teamName"],
-            "ID": data["UID"],
+            "fname": data["f_name"],
+            "lname": data["l_name"],
+            "team": data["team_name"],
+            "ID": data["member_id"],
         }
         return status_data
 
