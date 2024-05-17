@@ -57,19 +57,19 @@ async def dashboard_details(
     status_list = []
     team_name = None
     doc = db.collection(FIRESTORE_COLLECTION)
-    query = doc.where(filter=FieldFilter("teamCode", "==", team_id)).stream()
+    query = doc.where(filter=FieldFilter("team_id", "==", team_id)).stream()
     try:
         # print(query)
         for d in query:
             # print(d.__dict__)
             details = d.to_dict()
             # print(details)
-            member_ids.append(details["UID"])
+            member_ids.append(details["member_id"])
             member_names.append(
-                " ".join([details["firstName"], details["lastName"]])
+                " ".join([details["f_name"], details["l_name"]])
             )
             if not team_name:
-                team_name = details["teamName"]
+                team_name = details["team_name"]
             all_timings.append(
                 {
                     "IN": details.get("checkin", " "),

@@ -234,6 +234,7 @@ async def register_participant(request: Request, uid: str):
     ):  # Fetch details from database and render registration form
         details = g.df.loc[g.df["member_id"] == uid].to_json(orient="records")
         doc = loads(details[1:-1])
+        print(doc)
         doc["status"] = "NULL"
         return templates.TemplateResponse(
             "master_checkin.html", {"request": request, "Details": doc}
@@ -257,7 +258,7 @@ async def register_participant(request: Request, uid: str):
     dependencies=[Depends(load_data)],
     response_class=HTMLResponse,
 )
-@limiter.limit("2/minute")
+# @limiter.limit("2/minute")
 async def register(request: Request, UID: str):
     """Register the participant. This function is called when the user submits
     the register form on the register page. It updates the participant details

@@ -27,7 +27,7 @@ function validform() {
     //     "email": h,
     //     "teamName": i,
     //     "projectTracks": j}
-    let data = { "UID": b}
+    let data = { "member_id": b}
 
     console.log({data});
     // if (b==null || b=="")
