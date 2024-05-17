@@ -44,8 +44,8 @@ app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 allow_all = ["*"]
 app.add_middleware(GlobalsMiddleware)
 
-if ENVIRONMENT == "production":
-    app.add_middleware(HTTPSRedirectMiddleware)
+# if ENVIRONMENT == "production":
+#     app.add_middleware(HTTPSRedirectMiddleware)
 
 app.add_middleware(
     CORSMiddleware,
