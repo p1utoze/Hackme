@@ -20,3 +20,12 @@ body {
 h2, h3 {
     color: #ffffff;
 }
+
+
+@media (max-width: 768px)
+{
+ .details
+ {
+  width:300px;
+  }
+}
