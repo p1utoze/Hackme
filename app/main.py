@@ -9,6 +9,7 @@ from fastapi import FastAPI, Depends, Request, Form
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.middleware.httpsredirect import HTTPSRedirectMiddleware
 import starlette.status as status
 from app.api_globals import GlobalsMiddleware, g
 from json import loads
@@ -22,6 +23,7 @@ from app.admin.utils import (
     POSTGRES_PASSWORD,
     POSTGRES_USER,
     FIRESTORE_COLLECTION,
+    ENVIRONMENT,
 )
 from app.participants.register import fetch_user_status, check_participant
 from app.settings import static_dir, template_dir
@@ -41,6 +43,10 @@ app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 # Add CORS middleware to allow all origins to make requests to this API server
 allow_all = ["*"]
 app.add_middleware(GlobalsMiddleware)
+
+# if ENVIRONMENT == "production":
+#     app.add_middleware(HTTPSRedirectMiddleware)
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=allow_all,
@@ -155,6 +161,7 @@ async def email_login(
 
 
 @app.get("/qr_scan/{uid}", response_class=RedirectResponse)
+@limiter.limit("2/minute")
 async def qr_validate(request: Request, uid: str):
     """The endpoint is called when the user scans the QR code. It checks if the
     user is logged in or not. If the user is not logged in, it sets a session
