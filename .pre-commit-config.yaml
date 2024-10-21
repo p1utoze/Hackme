@@ -3,7 +3,7 @@ ci:
 
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.6.0
+    rev: v5.0.0
     hooks:
       - id: trailing-whitespace
       - id: end-of-file-fixer
@@ -16,15 +16,15 @@ repos:
       - id: autoflake
 
   - repo: https://github.com/pycqa/flake8
-    rev: 7.0.0
+    rev: 7.1.1
     hooks:
       - id: flake8
         exclude: ^.*__init__.py$
-        stages: [commit, push, manual]
+        stages: [pre-commit, pre-push, manual]
         args: [--max-line-length=109]
 
   - repo: https://github.com/hhatto/autopep8
-    rev:  v2.1.0
+    rev:  v2.3.1
     hooks:
       - id: autopep8
         args: [--in-place, --aggressive, --aggressive, --max-line-length=79]
@@ -46,19 +46,19 @@ repos:
 #        files: requirements
 
   - repo: https://github.com/PyCQA/bandit
-    rev: '1.7.8'
+    rev: '1.7.10'
     hooks:
       - id: bandit
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.4.4
+    rev: v0.7.0
     hooks:
       - id: ruff
         args:
           - --fix
           - --line-length=79
   - repo: https://github.com/psf/black
-    rev: 24.4.2
+    rev: 24.10.0
     hooks:
       - id: black
         language_version: python3
